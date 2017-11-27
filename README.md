@@ -17,6 +17,7 @@ Created By me [Abed Putra](http://abedputra.com)
 - Export employee attendance to CSV or XLS
 - Check your employee attendance late or ontime every day
 - Review your employee attendance for 1 week, 1 month, 1 Years etc
+- Generate QR for your employee name
 
 # Settings
 - database.php
