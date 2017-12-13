@@ -76,6 +76,9 @@ if($dataLevel == "is_admin"){
 # Warning
 <b>(You need install Employee Attendance with QR on Google Play for attendance) https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqr. Attendance login system can't working without Employee Attendance with QR application</b>
 
+# Support me
+Support me at <a href="https://www.patreon.com/abedputra">Patron</a>
+
 # About
 Attendance login system is based on the [codeigniter](https://github.com/bcit-ci/CodeIgniter). Attendance login system is based frontend on the Bootstrap framework created by  [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
 Password hashing with PBKDF2, Author: [havoc AT defuse.ca](https://github.com/defuse).
