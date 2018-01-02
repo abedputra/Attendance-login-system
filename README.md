@@ -76,6 +76,45 @@ if($dataLevel == "is_admin"){
 # Warning
 <b>(You need install Employee Attendance with QR on Google Play for attendance) https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqr. Attendance login system can't working without Employee Attendance with QR application</b>
 
+
+
+***This application can't working without Employee Attendance with QR, so please download first on Google Play.***
+
+# -----How to install Attendance login system?
+Download from https://github.com/abedputra/Attendance-login-system.
+
+# -----How to use this application ?
+Please follow 2 steps:
+1. Settings Admin
+-First download Attendance login system
+-How to Install ?? follow Github desc.
+-After install go to Attendance login system link
+-Login into Attendance login system
+-Do settings menu such as how many employee do you have
+-Make sure you get new KEY
+-Go to generate QR, and generate your employee name
+-Give the QR to your employees so they can scan for attendance.
+
+2. Settings Application
+-Install this application.
+-Go to settings.
+-Fill the data such as the link where Attendance login system is located, and the KEY.
+-Scan your barcode.
+-Done
+
+# -----How to get KEY?
+-Go to Attendance login system link
+-Login
+-Go to settings
+-Click get Key
+-Save
+-Dont forget to add KEY to your application
+
+# -----How to get my employees data?
+-Go to Attendance login system link
+-Login
+-Go to employee menu
+
 # Support me
 Support me at <a href="https://www.patreon.com/abedputra">Patron</a>
 
@@ -84,6 +123,9 @@ Attendance login system is based on the [codeigniter](https://github.com/bcit-ci
 Password hashing with PBKDF2, Author: [havoc AT defuse.ca](https://github.com/defuse).
 Ported to CodeIgniter by [Richard Thornton](http://twitter.com/RichardThornton). 
 CodeIgniter Curl Libraries by [Philip Sturgeon](https://github.com/philsturgeon).
+
+If you have question, please email me : abedputra@gmail.com
+Visit: http://abedputra.com
 
 # LICENSE
 The MIT License (MIT).
