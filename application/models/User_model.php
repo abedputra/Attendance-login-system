@@ -417,7 +417,16 @@ class User_model extends CI_Model {
         }else{
             $this->db->order_by("date", "DESC");
         }
-        $query = $this->db->get_where('absent', $where);
+        
+        if($name != '' && $datefrom != '' && $dateto != ''){
+            $this->db->like('name',$name);
+            $query = $this->db->get_where('absent', "date >= '$datefrom' AND date <= '$dateto'");
+        }elseif($name != '' && empty($datefrom) && empty($dateto)){
+            $this->db->like('name',$name);
+            $query = $this->db->get_where('absent');
+        }else{
+            $query = $this->db->get_where('absent', $where);
+        }
         return $query->result();
       }
     }
