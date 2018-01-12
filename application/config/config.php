@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://your_website.com'; //change link
+$config['base_url'] = 'http://adminweb.com/admin/'; //change link
 
 /*
 |--------------------------------------------------------------------------
