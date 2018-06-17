@@ -45,6 +45,14 @@ private $lang = "en"; //Lang ReCAPTCHA
 public $secret = ''; //Secret
 ```
 
+- .htaccess<br>
+Change to your folder installations<br>
+```
+RewriteBase /mypage/test/
+```
+
+
+
 # User Level
 - is_admin
 - is_author
