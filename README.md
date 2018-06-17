@@ -106,15 +106,22 @@ Please follow 2 steps:
 
 # -----How to get KEY?
 -Go to Attendance login system link
+
 -Login
+
 -Go to settings
+
 -Click get Key
+
 -Save
+
 -Dont forget to add KEY to your application
 
 # -----How to get my employees data?
 -Go to Attendance login system link
+
 -Login
+
 -Go to employee menu
 
 # Support me
