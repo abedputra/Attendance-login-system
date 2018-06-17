@@ -21,6 +21,8 @@ Created By me [Abed Putra](http://abedputra.com)
 - Review your employee attendance for 1 week, 1 month, 1 Years etc
 - Generate QR for your employee name
 
+![Attendance-login-system](https://user-images.githubusercontent.com/11581453/41508123-e4e1579e-7269-11e8-9493-3e6c3a7e9b9c.png)
+
 # Settings
 - database.php
 ```
