@@ -85,52 +85,47 @@ if($dataLevel == "is_admin"){
 ```
 # Warning
 <b>(You need install Employee Attendance with QR on Google Play for attendance) https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqr. Attendance login system can't working without Employee Attendance with QR application</b>
-
-
-
+<br><br>
 ***This application can't working without Employee Attendance with QR, so please download first on Google Play.***
+<br><br>
+
+# New Version
+Pro version for app, please download from here (https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqrpro
 
 # -----How to install Attendance login system?
 Download from https://github.com/abedputra/Attendance-login-system.
 
 # -----How to use this application ?
-Please follow 2 steps:
-1. Settings Admin
--First download Attendance login system
--How to Install ?? follow Github desc.
--After install go to Attendance login system link
--Login into Attendance login system
--Do settings menu such as how many employee do you have
--Make sure you get new KEY
--Go to generate QR, and generate your employee name
--Give the QR to your employees so they can scan for attendance.
+Please follow 2 steps:<br>
+1. Settings System Management
+-First download Attendance login system<br>
+-How to Install ?? follow Github desc<br>
+-After install go to Attendance login system link<br>
+-Login into Attendance login system<br>
+-Do settings menu such as how many employee do you have<br>
+-Make sure you get new KEY<br>
+-Go to generate QR, and generate your employee name<br>
+-Give the QR to your employees so they can scan for attendance.<br><br>
 
-2. Settings Application
--Install this application.
--Go to settings.
--Fill the data such as the link where Attendance login system is located, and the KEY.
--Scan your barcode.
--Done
+2. Settings Application<br>
+-Install app from google Play (https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqr)<br>
+-Go to settings.<br>
+-Fill the data such as the link where Attendance login system is located, and the KEY.<br>
+-Scan your barcode.<br>
+-Done<br>
 
 # -----How to get KEY?
--Go to Attendance login system link
-
--Login
-
--Go to settings
-
--Click get Key
-
--Save
-
--Dont forget to add KEY to your application
+-Go to Attendance login system link<br>
+-Login<br>
+-Go to settings<br>
+-Click get Key<br>
+-Save<br>
+-Dont forget to add KEY to your application<br>
 
 # -----How to get my employees data?
--Go to Attendance login system link
-
--Login
-
--Go to employee menu
+-Go to Attendance login system link<br>
+-Login<br>
+-Go to employee menu<br>
 
 # Support me
 Support me at <a href="https://www.patreon.com/abedputra">Patron</a>
