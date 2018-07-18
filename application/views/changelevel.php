@@ -1,14 +1,14 @@
 <div class="col-lg-4 col-lg-offset-4">
     <h2>Change Level</h2>
-    <h5>Hi <span><?php echo $first_name; ?></span>, <br>Please choose the level user.</h5>     
+    <h5>Hi <span><?php echo $first_name; ?></span>, <br>Please choose the level user.</h5>
     <?php $fattr = array('class' => 'form-signin');
          echo form_open(site_url().'main/changelevel/', $fattr); ?>
-    
+
     <div class="form-group">
         <select class="form-control" name="email" id="email">
             <?php
             foreach($groups as $row)
-            { 
+            {
               echo '<option value="'.$row->email.'">'.$row->email.'</option>';
             }
             ?>
@@ -20,7 +20,7 @@
         $dd_list = array(
                   '1'   => 'Admin',
                   '2'   => 'Author',
-                  '3'   => 'Editor',
+                  '3'   => 'Employee',
                   '4'   => 'Subscriber',
                 );
         $dd_name = "level";

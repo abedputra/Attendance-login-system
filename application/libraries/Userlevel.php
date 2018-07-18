@@ -20,7 +20,7 @@ class UserLevel{
             }
             elseif($role==3)
             {
-                $userLevel = 'is_editor';
+                $userLevel = 'is_employee';
             }
             elseif($role==4)
             {

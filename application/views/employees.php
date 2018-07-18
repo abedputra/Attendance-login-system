@@ -2,27 +2,27 @@
         <h2>Employee</h2>
         <h5>Hello <span><?php echo $first_name; ?></span>.</h5>
         <hr>
-        
+
         <?php
-            if(!empty($this->input->post('datefrom')) && !empty($this->input->post('dateto')) && empty($this->input->post('name'))){
-                echo '<h3 class="alert alert-info">Result Date <b>'.$this->input->post('datefrom').'</b> to <b>'.$this->input->post('dateto').'</b></h3>';
-            }else if(!empty($this->input->post('datefrom')) && !empty($this->input->post('dateto')) && !empty($this->input->post('name'))){
-                echo '<h3 class="alert alert-info">Result Name <b>'.$this->input->post('name').'</b> and Date <b>'.$this->input->post('datefrom').'</b> to <b>'.$this->input->post('dateto').'</b></h3>';
-            }else if(!empty($this->input->post('datefrom'))){
-                echo '<h3 class="alert alert-info">Result Date <b>'.$this->input->post('datefrom').'</b></h3>';
-            }else if(!empty($this->input->post('name'))){
-                echo '<h3 class="alert alert-info">Result Name <b>'.$this->input->post('name').'</b></h3>';
+            if(!empty($this->input->get('datefrom')) && !empty($this->input->get('dateto')) && empty($this->input->get('name'))){
+                echo '<h3 class="alert alert-info">Result Date <b>'.$this->input->get('datefrom').'</b> to <b>'.$this->input->get('dateto').'</b></h3>';
+            }else if(!empty($this->input->get('datefrom')) && !empty($this->input->get('dateto')) && !empty($this->input->get('name'))){
+                echo '<h3 class="alert alert-info">Result Name <b>'.$this->input->get('name').'</b> and Date <b>'.$this->input->get('datefrom').'</b> to <b>'.$this->input->get('dateto').'</b></h3>';
+            }else if(!empty($this->input->get('datefrom'))){
+                echo '<h3 class="alert alert-info">Result Date <b>'.$this->input->get('datefrom').'</b></h3>';
+            }else if(!empty($this->input->get('name'))){
+                echo '<h3 class="alert alert-info">Result Name <b>'.$this->input->get('name').'</b></h3>';
             }
         ?>
-        
+
         <div class="panel panel-primary">
           <div class="panel-heading">Search</div>
             <div class="panel-body">
                 <?php
-                $fattr = array('class' => 'form-inline text-center');
-                echo form_open(site_url().'main/employees/', $fattr); 
+                $fattr = array('class' => 'form-inline text-center', 'method' => 'GET');
+                echo form_open(site_url().'main/employees/', $fattr);
                 ?>
-                
+
                 <div class="form-group">
                     <lable>Name</lable>
                   <?php echo form_input(array('name'=>'name', 'id'=>'name', 'placeholder'=>'Name', 'class'=>'form-control', 'value' => set_value('name'))); ?>
@@ -52,13 +52,13 @@
         <div class="row">
         <div class="col-md-12">
         <?php
-        $fattr = array('class' => 'form-inline pull-left');
-        echo form_open(site_url().'main/employees/', $fattr); 
+        $fattr = array('class' => 'form-inline pull-left', 'method' => 'GET');
+        echo form_open(site_url().'main/employees/', $fattr);
         ?>
-        
-        <input type="hidden" name="name" value="<?php echo $this->input->post('name'); ?>">
-        <input type="hidden" name="datefrom" value="<?php echo $this->input->post('datefrom'); ?>">
-        <input type="hidden" name="dateto" value="<?php echo $this->input->post('dateto'); ?>">
+
+        <input type="hidden" name="name" value="<?php echo $this->input->get('name'); ?>">
+        <input type="hidden" name="datefrom" value="<?php echo $this->input->get('datefrom'); ?>">
+        <input type="hidden" name="dateto" value="<?php echo $this->input->get('dateto'); ?>">
         <div class="form-group">
             <lable>Order By </lable>
         <?php
@@ -81,30 +81,28 @@
         <?php echo form_submit(array('value'=>'Go!', 'class'=>'btn btn-primary')); ?>
         </div>
         <?php echo form_close(); ?>
-        
+
         <?php
-        $fattr = array('class' => 'form-inline pull-right');
-        echo form_open(site_url().'main/employees/', $fattr); 
+        $fattr = array('class' => 'form-inline pull-right', 'method' => 'GET');
+        echo form_open(site_url().'main/employees/', $fattr);
         ?>
-        
-        <input type="hidden" name="name" value="<?php echo $this->input->post('name'); ?>">
-        <input type="hidden" name="datefrom" value="<?php echo $this->input->post('datefrom'); ?>">
-        <input type="hidden" name="dateto" value="<?php echo $this->input->post('dateto'); ?>">
-        <input type="hidden" name="order" value="<?php echo $this->input->post('order'); ?>">
+
+        <input type="hidden" name="name" value="<?php echo $this->input->get('name'); ?>">
+        <input type="hidden" name="datefrom" value="<?php echo $this->input->get('datefrom'); ?>">
+        <input type="hidden" name="dateto" value="<?php echo $this->input->get('dateto'); ?>">
+        <input type="hidden" name="order" value="<?php echo $this->input->get('order'); ?>">
 
         <div class="form-group">
-        <button type="submit" name="download" value="xls" class="btn btn-default">Export to Exel</button>
+        <button type="submit" name="download" value="xls" class="btn btn-default">*Export to Exel</button>
         <button type="submit" name="download" value="csv" class="btn btn-default">Export to CSV</button>
+        <span id="helpBlock" class="help-block">*Just Compatible with Microsoft Excel 2007.</span>
         </div>
         <?php echo form_close(); ?>
         </div>
-        
+
         <div class="table-responsive col-md-12" style="margin-top:50px">
             <table class="table table-hover table-bordered table-striped">
               <tr>
-                  <th>
-                      No.
-                  </th>
                   <th>
                       Name
                   </th>
@@ -137,11 +135,9 @@
                   </th>
               </tr>
                     <?php
-                    $counter = 1; 
                         foreach($groups as $row)
                         {
                         echo '<tr>';
-                        echo '<td>'.$counter++.'</td>';
                         echo '<td>'.$row->name.'</td>';
                         echo '<td>'.$row->date.'</td>';
                         echo '<td>'.$row->in_time.'</td>';
@@ -158,6 +154,7 @@
             </table>
         </div>
         </div>
+        <p><?php echo $links; ?></p>
         <?php
         }else{
             echo '<div class="alert alert-warning" role="alert"  style="margin-top:50px">'.$info.'</div>';

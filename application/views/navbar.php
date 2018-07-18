@@ -16,7 +16,7 @@
                   </button>
                   <a class="navbar-brand" href="<?php echo site_url();?>main/"><img src="<?php echo base_url(); ?>public/image/ic_launcher.png" width="25" style="border: 1px solid #fff;"></a>
                 </div>
-            
+
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul class="nav navbar-nav">
@@ -25,6 +25,9 @@
                         if($dataLevel == 'is_admin'){
                             echo'<li><a href="'.site_url().'main/employees"><i class="fa fa-user" aria-hidden="true"></i> Employee</a></li>';
                             echo'<li><a href="'.site_url().'main/settings"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> Settings</a></li>';
+                        }
+                        if($dataLevel == 'is_employee'){
+                            echo'<li><a href="'.site_url().'main/employees"><i class="fa fa-user" aria-hidden="true"></i> Employee</a></li>';
                         }
                     ?>
                     <li><a href="<?php echo site_url();?>main/generateqr"><i class="glyphicon glyphicon-qrcode" aria-hidden="true"></i> Generate QR</a></li>
@@ -43,7 +46,7 @@
                         }
                     ?>
                   </ul>
-                  
+
                   <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i> <?php echo $first_name; ?> <span class="caret"></span></a>

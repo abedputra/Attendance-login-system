@@ -24,17 +24,17 @@
               </tr>
                     <?php
                         foreach($groups as $row)
-                        { 
+                        {
                         if($row->role == 1){
                             $rolename = "Admin";
                         }elseif($row->role == 2){
                             $rolename = "Author";
                         }elseif($row->role == 3){
-                            $rolename = "Editor";
+                            $rolename = "Employee";
                         }elseif($row->role == 4){
                             $rolename = "Subscriber";
                         }
-                        
+
                         echo '<tr>';
                         echo '<td>'.$row->first_name.'</td>';
                         echo '<td>'.$row->email.'</td>';

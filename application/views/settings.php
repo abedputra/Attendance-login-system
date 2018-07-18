@@ -6,8 +6,8 @@
         <hr>
         <?php
         $fattr = array('class' => 'form-signin');
-        echo form_open(site_url().'main/settings/', $fattr); 
-        
+        echo form_open(site_url().'main/settings/', $fattr);
+
         function tz_list() {
             $zones_array = array();
             $timestamp = time();
@@ -18,7 +18,7 @@
             return $zones_array;
         }
         ?>
-        
+
         <?php echo '<input type="hidden" name="id" value="'.$id.'">'; ?>
         <div class="form-group">
         <span>Start Time</span>
@@ -40,6 +40,22 @@
           <?php echo form_input(array('name'=>'key', 'id'=> 'key', 'placeholder'=>'KEY', 'class'=>'form-control', 'value' => set_value('key', $key))); ?>
           <?php echo form_error('key') ?>
         </div>
+        <span>Recaptcha</span>
+        <select name="recaptcha" id="recaptcha" class="form-control">
+          <?php
+          if($recaptcha == 0){
+            echo '
+            <option value="0" selected>No</option>
+            <option value="1">Yes</option>
+            ';
+          }else{
+            echo '
+            <option value="0">No</option>
+            <option value="1" selected>Yes</option>
+            ';
+          }
+          ?>
+        </select>
         <span>Timezone</span>
         <select name="timezone" id="timezone" class="form-control">
                 <option value="<?php echo $timezonevalue; ?>"><?php echo $timezone; ?></option>
@@ -61,7 +77,7 @@
             $randomString = sha1($characters[rand(0, $charactersLength - 1)]);
             return $randomString;
         }
-        
+
         echo '<div class="alert alert-info" role="alert">Share KEY via:</div>';
         echo '<a href="whatsapp://send?text='.$key.'" data-action="share/whatsapp/share"><img src="https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/whatsapp-512.png" width="50"></a> ';
         echo '<a href="mailto:?subject=Share KEY&amp;body=The Key is: '.$key.'" title="Share KEY"><img src="http://www.clker.com/cliparts/J/r/W/B/j/f/pink-email-icon-md.png" width="50"></a> ';

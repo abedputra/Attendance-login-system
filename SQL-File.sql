@@ -53,15 +53,16 @@ CREATE TABLE `settings` (
   `out_time` time NOT NULL,
   `many_employee` varchar(50) NOT NULL,
   `key_insert` char(40) NOT NULL,
-  `timezone` varchar(100) NOT NULL
+  `timezone` varchar(100) NOT NULL,
+  `recaptcha` tinyint(4) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `start_time`, `out_time`, `many_employee`, `key_insert`, `timezone`) VALUES
-(1, '08:00:00', '17:00:00', '8', '51e69892ab49df85c6230ccc57f8e1d1606cabbb', 'Asia/Makassar');
+INSERT INTO `settings` (`id`, `start_time`, `out_time`, `many_employee`, `key_insert`, `timezone`, `recaptcha`) VALUES
+(1, '08:00:00', '17:00:00', '8', '51e69892ab49df85c6230ccc57f8e1d1606cabbb', 'Asia/Makassar', 0);
 
 -- --------------------------------------------------------
 

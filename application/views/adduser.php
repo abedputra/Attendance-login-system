@@ -1,7 +1,7 @@
 <div class="col-lg-4 col-lg-offset-4">
     <h2>Hello <?php echo $first_name; ?>,</h2>
-    <h5>Please enter the required information below.</h5>     
-    <?php 
+    <h5>Please enter the required information below.</h5>
+    <?php
         $fattr = array('class' => 'form-signin');
         echo form_open('/main/adduser', $fattr);
     ?>
@@ -22,7 +22,7 @@
         $dd_list = array(
                   '1'   => 'Admin',
                   '2'   => 'Author',
-                  '3'   => 'Editor',
+                  '3'   => 'Employee',
                   '4'   => 'Subscriber',
                 );
         $dd_name = "role";
