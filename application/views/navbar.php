@@ -24,14 +24,12 @@
                     <?php
                         if($dataLevel == 'is_admin'){
                             echo'<li><a href="'.site_url().'main/employees"><i class="fa fa-user" aria-hidden="true"></i> Employee</a></li>';
+                            echo'<li><a href="'.site_url().'main/generateqr"><i class="glyphicon glyphicon-qrcode" aria-hidden="true"></i> Generate QR</a></li>';
                             echo'<li><a href="'.site_url().'main/settings"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> Settings</a></li>';
                         }
                         if($dataLevel == 'is_employee'){
                             echo'<li><a href="'.site_url().'main/employees"><i class="fa fa-user" aria-hidden="true"></i> Employee</a></li>';
                         }
-                    ?>
-                    <li><a href="<?php echo site_url();?>main/generateqr"><i class="glyphicon glyphicon-qrcode" aria-hidden="true"></i> Generate QR</a></li>
-                    <?php
                         if($dataLevel == 'is_admin'){
                             echo'
                             <li class="dropdown">
