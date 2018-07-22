@@ -23,14 +23,14 @@ Created By me [Abed Putra](http://abedputra.com)
 
 ![Attendance-login-system](https://user-images.githubusercontent.com/11581453/41508123-e4e1579e-7269-11e8-9493-3e6c3a7e9b9c.png)
 
-# How to install ?
-Please check this Wiki https://github.com/abedputra/Attendance-login-system/wiki/Settings-Management-System-%3F
-
 # User Level
 - is_admin
 - is_author
-- is_editor
+- is_employee
 - is_subscriber
+
+# Wiki
+https://github.com/abedputra/Attendance-login-system/wiki
 
 # login
 - Pass : admin
@@ -59,8 +59,11 @@ if($dataLevel == "is_admin"){
 # New Version
 Pro version for app, please download from here (https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqrpro
 
-# -----How to install Attendance login system?
-Download from https://github.com/abedputra/Attendance-login-system.
+<br>
+<br>
+<br>
+
+----------------------------------------------------------------------------------------------------------------------------------------
 
 # -----How to use this application ?
 Please follow 2 steps:<br>
@@ -84,6 +87,12 @@ https://github.com/abedputra/Attendance-login-system/wiki/Settings-on-Employee-A
 -Go to Attendance login system link<br>
 -Login<br>
 -Go to employee menu<br>
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+<br>
+<br>
+<br>
 
 # Support me
 Support me at <a href="https://www.patreon.com/abedputra">Patron</a>
