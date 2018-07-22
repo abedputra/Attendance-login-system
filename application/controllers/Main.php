@@ -255,11 +255,8 @@ class Main extends CI_Controller {
     public function adduser()
     {
         $data = $this->session->userdata;
-        if(empty($data['role'])){
-	        redirect(site_url().'main/login/');
-	    }
 
-        //check user level
+      //check user level
 	    if(empty($data['role'])){
 	        redirect(site_url().'main/login/');
 	    }
@@ -1208,32 +1205,61 @@ class Main extends CI_Controller {
 	    if(empty($data['role'])){
 	        redirect(site_url().'main/login/');
 	    }
+      $dataLevel = $this->userlevel->checkLevel($data['role']);
+      //check user level
 
-	    $dataLevel = $this->userlevel->checkLevel($data['role']);
-	    //check user level
+      //check is admin or not
+      if($dataLevel == "is_admin"){
 
-	    $data['title'] = "Generate QR Code";
-	    $this->form_validation->set_rules('qr', 'Your Employee Full Name');
+    	    $data['title'] = "Generate QR Code";
 
-	    //check is admin or not
-        if (empty($_POST)) {
+          $this->form_validation->set_rules('firstname', 'First Name', 'required');
+          $this->form_validation->set_rules('lastname', 'Last Name', 'required');
+          $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+          $this->form_validation->set_rules('role', 'role', 'required');
+          $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
+          $this->form_validation->set_rules('passconf', 'Password Confirmation', 'required|matches[password]');
+
+    	    $this->form_validation->set_rules('qr', 'Your Employee Full Name');
+
+    	    //check is admin or not
+            if (empty($_POST)) {
                 $this->load->view('header', $data);
                 $this->load->view('navbar', $data);
                 $this->load->view('container');
                 $this->load->view('generateqr', $data);
                 $this->load->view('footer');
+            }else{
+              if($this->user_model->isDuplicate($this->input->post('email'))){
+                  $this->session->set_flashdata('flash_message', 'User email already exists');
+                  redirect(site_url().'main/generateqr');
+              }else{
+                  $this->load->library('password');
+                  $post = $this->input->post(NULL, TRUE);
+                  $cleanPost = $this->security->xss_clean($post);
+                  $cleanPost['qr'] = $this->input->post('firstname')." ".$this->input->post('lastname');
+                  $hashed = $this->password->create_hash($cleanPost['password']);
+                  $cleanPost['email'] = $this->input->post('email');
+                  $cleanPost['role'] = $this->input->post('role');
+                  $cleanPost['firstname'] = $this->input->post('firstname');
+                  $cleanPost['lastname'] = $this->input->post('lastname');
+                  $cleanPost['password'] = $hashed;
+                  unset($cleanPost['passconf']);
 
-        }else{
-            $post = $this->input->post(NULL, TRUE);
-            $cleanPost = $this->security->xss_clean($post);
-            $cleanPost['qr'] = $this->input->post('qr');
-
-            $this->load->view('header', $data);
-            $this->load->view('navbar', $data);
-            $this->load->view('container');
-            $this->load->view('generateqr', $data, $cleanPost);
-            $this->load->view('footer');
-
-        }
+                  //insert to database
+                  if(!$this->user_model->addUser($cleanPost)){
+                      $this->session->set_flashdata('flash_message', 'There was a problem updating your profile');
+                      redirect(site_url().'main/generateqr');
+                  }else{
+                      $this->session->set_flashdata('success_message', 'Success adding user, and generate the QR.');
+                      $this->load->view('header', $data);
+                      $this->load->view('navbar', $data);
+                      $this->load->view('container');
+                      $this->load->view('generateqr', $data, $cleanPost);
+                      $this->load->view('footer');
+                  }
+              }
+            }
+      }
 	}
 }
