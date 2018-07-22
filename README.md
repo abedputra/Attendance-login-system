@@ -23,41 +23,14 @@ Created By me [Abed Putra](http://abedputra.com)
 
 ![Attendance-login-system](https://user-images.githubusercontent.com/11581453/41508123-e4e1579e-7269-11e8-9493-3e6c3a7e9b9c.png)
 
-# Settings
-- database.php
-```
-'hostname' => 'localhost', 'username' => '', 'password' => '', 'database' => '',
-```
-
-- config.php
-```
-//Link URL
-$config['base_url'] = 'http://adminweb.com/admin/';
-// Sent email from:
-$config['register'] = 'admin@gmail.com';
-$config['forgot'] = 'admin@gmail.com';
-```
-
-- ReCAPTCHA.php (Library)<br>
-```
-private $dataSitekey = ""; //Your SiteKey`
-private $lang = "en"; //Lang ReCAPTCHA
-public $secret = ''; //Secret
-```
-
-
+# How to install ?
+Please check this Wiki https://github.com/abedputra/Attendance-login-system/wiki/Settings-Management-System-%3F
 
 # User Level
 - is_admin
 - is_author
 - is_editor
 - is_subscriber
-
-# Install
-- Clone or download
-- Import Sql file
-- Do Settings
-- Done
 
 # login
 - Pass : admin
@@ -92,21 +65,12 @@ Download from https://github.com/abedputra/Attendance-login-system.
 # -----How to use this application ?
 Please follow 2 steps:<br>
 1. Settings System Management
--First download Attendance login system<br>
--How to Install ?? follow Github desc<br>
--After install go to Attendance login system link<br>
--Login into Attendance login system<br>
--Do settings menu such as how many employee do you have<br>
--Make sure you get new KEY<br>
--Go to generate QR, and generate your employee name<br>
--Give the QR to your employees so they can scan for attendance.<br><br>
+Please check this<br>
+https://github.com/abedputra/Attendance-login-system/wiki/Settings-Management-System-%3F
 
-2. Settings Application<br>
--Install app from google Play (https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqr)<br>
--Go to settings.<br>
--Fill the data such as the link where Attendance login system is located, and the KEY.<br>
--Scan your barcode.<br>
--Done<br>
+2. Settings Android Application<br>
+Please check this<br>
+https://github.com/abedputra/Attendance-login-system/wiki/Settings-on-Employee-Attendance-with-QR-Application-%3F
 
 # -----How to get KEY?
 -Go to Attendance login system link<br>
