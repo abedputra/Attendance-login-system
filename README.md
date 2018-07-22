@@ -45,12 +45,6 @@ private $lang = "en"; //Lang ReCAPTCHA
 public $secret = ''; //Secret
 ```
 
-- .htaccess<br>
-Change to your folder installations<br>
-```
-RewriteBase /mypage/test/
-```
-
 
 
 # User Level
@@ -133,7 +127,7 @@ Support me at <a href="https://www.patreon.com/abedputra">Patron</a>
 # About
 Attendance login system is based on the [codeigniter](https://github.com/bcit-ci/CodeIgniter). Attendance login system is based frontend on the Bootstrap framework created by  [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
 Password hashing with PBKDF2, Author: [havoc AT defuse.ca](https://github.com/defuse).
-Ported to CodeIgniter by [Richard Thornton](http://twitter.com/RichardThornton). 
+Ported to CodeIgniter by [Richard Thornton](http://twitter.com/RichardThornton).
 CodeIgniter Curl Libraries by [Philip Sturgeon](https://github.com/philsturgeon).
 
 If you have question, please email me : abedputra@gmail.com
@@ -142,7 +136,7 @@ Visit: http://abedputra.com
 # LICENSE
 The MIT License (MIT).
 
-Copyright (c) 2017, Abed Putra. 
- 
-Please feel free to send me an email if you have any problems. 
+Copyright (c) 2017, Abed Putra.
+
+Please feel free to send me an email if you have any problems.
 Thank you so much, my email : abedputra@gmail.com.
