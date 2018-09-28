@@ -558,11 +558,11 @@ class User_model extends CI_Model {
         $newline = "\r\n";
         $filename = "Data-Employee.".$download;
 
-        if ((($name != '') && ($datefrom == '') && ($dateto == ''))){$query = "SELECT * FROM absent Where name = '$name' order by date ASC";}
+        if ((($name != '') && ($datefrom == '') && ($dateto == ''))){$query = "SELECT * FROM absent Where name LIKE '%".$name."%' order by date ASC";}
         else if(($name == '') && ($datefrom != '') && ($dateto != '')){ $query = "SELECT * FROM absent Where `date` BETWEEN '$datefrom' AND '$dateto' order by date ASC";}
         else if(($name == '') && ($datefrom != '') && ($dateto == '')){ $query = "SELECT * FROM absent Where date >= '$datefrom' order by date ASC";}
         else if(($name == '') && ($datefrom == '') && ($dateto != '')){ $query = "SELECT * FROM absent Where Where date <= '$dateto' order by date ASC";}
-        else if (($name != '') && ($datefrom != '') && ($dateto != '')) {$query = "SELECT * FROM absent Where name = '$name' AND `date` BETWEEN '$datefrom'  AND  '$dateto' order by date ASC";}
+        else if (($name != '') && ($datefrom != '') && ($dateto != '')) {$query = "SELECT * FROM absent Where name LIKE '%".$name."%' AND `date` BETWEEN '$datefrom'  AND  '$dateto' order by date ASC";}
         else{$query = "SELECT * FROM absent order by date ASC";}
 
         $result = $this->db->query($query);
