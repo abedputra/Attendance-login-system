@@ -122,15 +122,23 @@ class User_model extends CI_Model {
             );
         $this->db->where('id', $post['user_id']);
         $this->db->update('users', $data);
+        $this->db->trans_complete();
+
         $success = $this->db->affected_rows();
 
         if(!$success){
-            error_log('Unable to updateUserInfo('.$post['user_id'].')');
-            return false;
+            // any trans error?
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }
+            $user_info = $this->getUserInfo($post['user_id']);
+            return $user_info;
+        }else{
+            $user_info = $this->getUserInfo($post['user_id']);
+            return $user_info;
         }
 
-        $user_info = $this->getUserInfo($post['user_id']);
-        return $user_info;
+        
     }
 
     public function checkLogin($post)
@@ -182,11 +190,16 @@ class User_model extends CI_Model {
     {
         $this->db->where('id', $post['user_id']);
         $this->db->update('users', array('password' => $post['password']));
+        $this->db->trans_complete();
+
         $success = $this->db->affected_rows();
 
         if(!$success){
-            error_log('Unable to updatePassword('.$post['user_id'].')');
-            return false;
+            // any trans error?
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }
+            return true;
         }
         return true;
     }
@@ -213,11 +226,16 @@ class User_model extends CI_Model {
     {
         $this->db->where('id', $post['user_id']);
         $this->db->update('users', array('password' => $post['password'], 'email' => $post['email'], 'first_name' => $post['firstname'], 'last_name' => $post['lastname']));
+        $this->db->trans_complete();
+
         $success = $this->db->affected_rows();
 
         if(!$success){
-            error_log('Unable to updatePassword('.$post['user_id'].')');
-            return false;
+            // any trans error?
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }
+            return true;
         }
         return true;
     }
@@ -227,10 +245,16 @@ class User_model extends CI_Model {
     {
         $this->db->where('email', $post['email']);
         $this->db->update('users', array('role' => $post['level']));
+        $this->db->trans_complete();
+
         $success = $this->db->affected_rows();
 
         if(!$success){
-            return false;
+            // any trans error?
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }
+            return true;
         }
         return true;
     }
@@ -240,10 +264,16 @@ class User_model extends CI_Model {
     {
         $this->db->where('email', $post['email']);
         $this->db->update('users', array('banned_users' => $post['banuser']));
+        $this->db->trans_complete();
+
         $success = $this->db->affected_rows();
 
         if(!$success){
-            return false;
+            // any trans error?
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }
+            return true;
         }
         return true;
     }
@@ -367,12 +397,18 @@ class User_model extends CI_Model {
         $this->db->where('name', $name);
         $this->db->where('date', $date);
         $this->db->update('absent', $string);
+        $this->db->trans_complete();
+
         $success = $this->db->affected_rows();
 
         if ($success){
             return true;
         }else{
-            return false;
+            // any trans error?
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }
+            return true;
         }
     }
 
@@ -390,13 +426,20 @@ class User_model extends CI_Model {
                 'recaptcha' => $post['recaptcha']
             )
         );
+        $this->db->trans_complete();
 
         $success = $this->db->affected_rows();
 
         if(!$success){
-            return false;
+            // any trans error?
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }
+            return true;
+        }else{
+            return true;
         }
-        return true;
+        
     }
 
     //get employees person
@@ -512,16 +555,16 @@ class User_model extends CI_Model {
         $this->db->limit($limit, $start);
 		$where = array();
 
-      if ($name != '') $where['name'] = $name;
-      if ($datefrom != '') $where['date >='] = $datefrom;
-      if ($dateto != '') $where['date <='] = $dateto;
+        if ($name != '') $where['name'] = $name;
+        if ($datefrom != '') $where['date >='] = $datefrom;
+        if ($dateto != '') $where['date <='] = $dateto;
 
-      if (empty($where))
-      {
+        if (empty($where))
+        {
         return array(); // ... or NULL
-      }
-      else
-      {
+        }
+        else
+        {
         if($order != ''){
             $this->db->order_by($order);
         }else{
@@ -538,7 +581,7 @@ class User_model extends CI_Model {
             $querys = $this->db->get_where('absent', $where);
         }
         return $query = $querys->result();
-      }
+        }
 
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
@@ -569,5 +612,62 @@ class User_model extends CI_Model {
         $data = $this->dbutil->csv_from_result($result, $delimiter, $newline);
         force_download($filename, $data);
 
+    }
+
+    //update profile user
+    public function updateProfileUser($post)
+    {
+        $this->db->where('id', $post['user_id']);
+        $this->db->update('users', array('email' => $post['email'], 'first_name' => $post['firstname'], 'last_name' => $post['lastname']));
+        $this->db->trans_complete();
+
+        $success = $this->db->affected_rows();
+
+        if(!$success){
+            // any trans error?
+            if ($this->db->trans_status() === FALSE) {
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+
+    public function insertQr($alldata)
+    {
+        $string = array(
+            'name'=> $alldata['qr'],
+        );
+        $q = $this->db->insert_string('history_qr',$string);
+        $this->db->query($q);
+        $check = $this->db->insert_id();
+
+        if ($check){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    //get history qr
+    public function getHistoryQrData()
+    {
+        $query = $this->db->get('history_qr');
+        return $query->result();
+    }
+
+    //delete history qr
+    public function deleteHistoryQr($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('history_qr');
+
+        if ($this->db->affected_rows() == '1') {
+            return TRUE;
+        }
+        else {
+            return FALSE;
+        }
     }
 }

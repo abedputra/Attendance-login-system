@@ -16,13 +16,20 @@
     <div class="form-group">
       <?php echo form_input(array('name'=>'email', 'id'=> 'email', 'placeholder'=>'Email', 'class'=>'form-control', 'value'=> set_value('email', $groups->email))); ?>
     </div>
-    <div class="form-group">
-      <?php echo form_password(array('name'=>'password', 'id'=> 'password', 'placeholder'=>'Password', 'class'=>'form-control', 'value' => set_value('password'))); ?>
-      <?php echo form_error('password') ?>
+    <div class="checkbox">
+      <label>
+        <input id="checkbox-pass" type="checkbox"> Change Password?
+      </label>
     </div>
-    <div class="form-group">
-      <?php echo form_password(array('name'=>'passconf', 'id'=> 'passconf', 'placeholder'=>'Confirm Password', 'class'=>'form-control', 'value'=> set_value('passconf'))); ?>
-      <?php echo form_error('passconf') ?>
+    <div id="hide-pass" style="display: none;">
+      <div class="form-group">
+        <?php echo form_password(array('name'=>'password', 'id'=> 'password', 'placeholder'=>'Password', 'class'=>'form-control', 'value' => set_value('password'))); ?>
+        <?php echo form_error('password') ?>
+      </div>
+      <div class="form-group">
+        <?php echo form_password(array('name'=>'passconf', 'id'=> 'passconf', 'placeholder'=>'Confirm Password', 'class'=>'form-control', 'value'=> set_value('passconf'))); ?>
+        <?php echo form_error('passconf') ?>
+      </div>
     </div>
     <?php echo form_submit(array('value'=>'Change', 'class'=>'btn btn-lg btn-primary btn-block')); ?>
     <?php echo form_close(); ?>

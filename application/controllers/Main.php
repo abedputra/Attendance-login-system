@@ -178,10 +178,12 @@ class Main extends CI_Controller {
         $this->form_validation->set_rules('firstname', 'First Name', 'required');
         $this->form_validation->set_rules('lastname', 'Last Name', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
-        $this->form_validation->set_rules('passconf', 'Password Confirmation', 'required|matches[password]');
+        $this->form_validation->set_rules('password', 'Password', 'min_length[5]');
+        $this->form_validation->set_rules('passconf', 'Password Confirmation', 'matches[password]');
 
         $data['groups'] = $this->user_model->getUserInfo($dataInfo['id']);
+
+        $issetPass = $this->input->post('password');
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('header', $data);
@@ -199,11 +201,19 @@ class Main extends CI_Controller {
             $cleanPost['email'] = $this->input->post('email');
             $cleanPost['firstname'] = $this->input->post('firstname');
             $cleanPost['lastname'] = $this->input->post('lastname');
-            unset($cleanPost['passconf']);
-            if(!$this->user_model->updateProfile($cleanPost)){
-                $this->session->set_flashdata('flash_message', 'There was a problem updating your profile');
+            if($issetPass){
+                unset($cleanPost['passconf']);
+                if(!$this->user_model->updateProfile($cleanPost)){
+                    $this->session->set_flashdata('flash_message', 'There was a problem updating your profile');
+                }else{
+                    $this->session->set_flashdata('success_message', 'Your profile has been updated.');
+                }
             }else{
-                $this->session->set_flashdata('success_message', 'Your profile has been updated.');
+                 if(!$this->user_model->updateProfileUser($cleanPost)){
+                    $this->session->set_flashdata('flash_message', 'There was a problem updating your profile');
+                }else{
+                    $this->session->set_flashdata('success_message', 'Your profile has been updated.');
+                }
             }
             redirect(site_url().'main/changeuser/');
         }
@@ -919,19 +929,19 @@ class Main extends CI_Controller {
 	    $dataLevel = $this->userlevel->checkLevel($data['role']);
 	    //check user level
 
-      $data['title'] = "Settings";
-      $this->form_validation->set_rules('start_time', 'Start', 'required');
-      $this->form_validation->set_rules('out_time', 'Out', 'required');
-      $this->form_validation->set_rules('many_employee', 'How many employee', 'required');
-      $this->form_validation->set_rules('key', 'KEY', 'required');
-      $this->form_validation->set_rules('timezone', 'Timezone', 'required');
+        $data['title'] = "Settings";
+        $this->form_validation->set_rules('start_time', 'Start', 'required');
+        $this->form_validation->set_rules('out_time', 'Out', 'required');
+        $this->form_validation->set_rules('many_employee', 'How many employee', 'required');
+        $this->form_validation->set_rules('key', 'KEY', 'required');
+        $this->form_validation->set_rules('timezone', 'Timezone', 'required');
 
-      $result = $this->user_model->getAllEmployee();
-      $data['id'] = $result->id;
-	    $data['many_employee'] = $result->many_employee;
-	    $data['start'] = $result->start_time;
-	    $data['out'] = $result->out_time;
-      $data['recaptcha'] = $result->recaptcha;
+        $result = $this->user_model->getAllEmployee();
+        $data['id'] = $result->id;
+        $data['many_employee'] = $result->many_employee;
+        $data['start'] = $result->start_time;
+        $data['out'] = $result->out_time;
+        $data['recaptcha'] = $result->recaptcha;
 
 	    if (!empty($data['timezone'] = $result->timezone))
 	    {
@@ -987,7 +997,7 @@ class Main extends CI_Controller {
 	        redirect(site_url().'main/login/');
 	    }
 
-      $dataInfo = array(
+        $dataInfo = array(
             'id'=>$data['id']
         );
 
@@ -995,20 +1005,20 @@ class Main extends CI_Controller {
 	    //check user level
 
 	    $data['title'] = "Employees List";
-	    $this->form_validation->set_rules('name', 'Name');
-      $this->form_validation->set_rules('datefrom', 'Date From');
-      $this->form_validation->set_rules('dateto', 'Date To');
-      $this->form_validation->set_rules('order', 'Order');
+        $this->form_validation->set_rules('name', 'Name');
+        $this->form_validation->set_rules('datefrom', 'Date From');
+        $this->form_validation->set_rules('dateto', 'Date To');
+        $this->form_validation->set_rules('order', 'Order');
 
 	    $result = $this->user_model->getAllEmployee();
 	    $data['timezone'] = $result->timezone;
 
 	    $now = new DateTime();
-      $now->setTimezone(new DateTimezone($data['timezone'])); //change your city
-      $nowToday =  $now->format('Y-m-d');
-      $data['date'] = $nowToday;
+        $now->setTimezone(new DateTimezone($data['timezone'])); //change your city
+        $nowToday =  $now->format('Y-m-d');
+        $data['date'] = $nowToday;
 
-      $resultGetUser = $this->user_model->getUserInfo($dataInfo['id']);
+        $resultGetUser = $this->user_model->getUserInfo($dataInfo['id']);
     	$name = $resultGetUser->first_name . " " . $resultGetUser->last_name;
 
 	    //check is admin or not
@@ -1034,54 +1044,49 @@ class Main extends CI_Controller {
                     $post = $this->input->get(NULL, TRUE);
                     $cleanPost = $this->security->xss_clean($post);
 
-                    if($this->input->get('datefrom') == ''){
-                      $cleanPost['datefrom'] = $nowToday;
-                      $cleanPost['dateto'] = $nowToday;
-                    }else{
-                      $cleanPost['datefrom'] = $this->input->get('datefrom');
-                      $cleanPost['dateto'] = $this->input->get('dateto');
-                    }
+                    $cleanPost['datefrom'] = $this->input->get('datefrom');
+                    $cleanPost['dateto'] = $this->input->get('dateto');
                     $cleanPost['name'] = $this->input->get('name');
                     $cleanPost['order'] = $this->input->get('order');
                     $cleanPost['download'] = $this->input->get('download');
 
                     // $data['groups'] = $this->user_model->search($cleanPost['name'], $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
 
-          					$config = array();
-          					$config["total_rows"] = "";
-          					$config["base_url"] = base_url().'main/employees/';
-          					$config['reuse_query_string'] = TRUE;
-          					$countAll = $this->user_model->record_count($cleanPost['name'], $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
-          					if (is_array($countAll)){
-          						$config["total_rows"] = 0;
-          					}else{
-          						$config["total_rows"] = $this->user_model->record_count($cleanPost['name'], $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
-          					}
-          					$config["per_page"] = 10;
-          					$config["uri_segment"] = 3;
-          					$choice = $config["total_rows"] / $config["per_page"];
-          					$config["num_links"] = round($choice);
-          					/* This Application Must Be Used With BootStrap 3 *  */
-          					$config['full_tag_open'] = "<ul class='pagination'>";
-          					$config['full_tag_close'] ="</ul>";
-          					$config['num_tag_open'] = '<li>';
-          					$config['num_tag_close'] = '</li>';
-          					$config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
-          					$config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
-          					$config['next_tag_open'] = "<li>";
-          					$config['next_tagl_close'] = "</li>";
-          					$config['prev_tag_open'] = "<li>";
-          					$config['prev_tagl_close'] = "</li>";
-          					$config['first_tag_open'] = "<li>";
-          					$config['first_tagl_close'] = "</li>";
-          					$config['last_tag_open'] = "<li>";
-          					$config['last_tagl_close'] = "</li>";
+  					$config = array();
+  					$config["total_rows"] = "";
+  					$config["base_url"] = base_url().'main/employees/';
+  					$config['reuse_query_string'] = TRUE;
+  					$countAll = $this->user_model->record_count($cleanPost['name'], $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
+  					if (is_array($countAll)){
+  						$config["total_rows"] = 0;
+  					}else{
+  						$config["total_rows"] = $this->user_model->record_count($cleanPost['name'], $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
+  					}
+  					$config["per_page"] = 10;
+  					$config["uri_segment"] = 3;
+  					$choice = $config["total_rows"] / $config["per_page"];
+  					$config["num_links"] = round($choice);
+  					/* This Application Must Be Used With BootStrap 3 *  */
+  					$config['full_tag_open'] = "<ul class='pagination'>";
+  					$config['full_tag_close'] ="</ul>";
+  					$config['num_tag_open'] = '<li>';
+  					$config['num_tag_close'] = '</li>';
+  					$config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+  					$config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+  					$config['next_tag_open'] = "<li>";
+  					$config['next_tagl_close'] = "</li>";
+  					$config['prev_tag_open'] = "<li>";
+  					$config['prev_tagl_close'] = "</li>";
+  					$config['first_tag_open'] = "<li>";
+  					$config['first_tagl_close'] = "</li>";
+  					$config['last_tag_open'] = "<li>";
+  					$config['last_tagl_close'] = "</li>";
 
-          					$this->pagination->initialize($config);
+  					$this->pagination->initialize($config);
 
-          					$page = ($this->uri->segment(3))? $this->uri->segment(3) : 0;
-          					$data["groups"] = $this->user_model->search($config["per_page"], $page, $cleanPost['name'], $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
-          					$data["links"] = $this->pagination->create_links();
+  					$page = ($this->uri->segment(3))? $this->uri->segment(3) : 0;
+  					$data["groups"] = $this->user_model->search($config["per_page"], $page, $cleanPost['name'], $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
+  					$data["links"] = $this->pagination->create_links();
 
                     if(!empty($cleanPost['download']) && empty($cleanPost['name']) && empty($cleanPost['datefrom']) && empty($cleanPost['dateto'])){
                          $this->user_model->createcsv("", $nowToday, "", $cleanPost['download']);
@@ -1123,55 +1128,50 @@ class Main extends CI_Controller {
                             $this->load->view('footer');
                         }
                     }else{
-    					          $post = $this->input->get(NULL, TRUE);
+    					$post = $this->input->get(NULL, TRUE);
                         $cleanPost['name'] = $name;
                         $cleanPost = $this->security->xss_clean($post);
-                        if($this->input->get('datefrom') == ''){
-                          $cleanPost['datefrom'] = $nowToday;
-                          $cleanPost['dateto'] = $nowToday;
-                        }else{
-                          $cleanPost['datefrom'] = $this->input->get('datefrom');
-                          $cleanPost['dateto'] = $this->input->get('dateto');
-                        }
+
+                        $cleanPost['datefrom'] = $this->input->get('datefrom');
+                        $cleanPost['dateto'] = $this->input->get('dateto');
                         $cleanPost['order'] = $this->input->get('order');
                         $cleanPost['download'] = $this->input->get('download');
 
-
                         $config = array();
 
-              					$config["base_url"] = base_url().'main/employees/';
-              					$config['reuse_query_string'] = TRUE;
+      					$config["base_url"] = base_url().'main/employees/';
+      					$config['reuse_query_string'] = TRUE;
                         $countAll = $this->user_model->record_count_searchPerson($name, $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
-              					if (is_array($countAll)){
-              						$config["total_rows"] = 0;
-              					}else{
-              						$config["total_rows"] = $this->user_model->record_count_searchPerson($name, $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
-              					}
-              					$config["per_page"] = 10;
-              					$config["uri_segment"] = 3;
-              					$choice = $config["total_rows"] / $config["per_page"];
-              					$config["num_links"] = round($choice);
-              					/* This Application Must Be Used With BootStrap 3 *  */
-              					$config['full_tag_open'] = "<ul class='pagination'>";
-              					$config['full_tag_close'] ="</ul>";
-              					$config['num_tag_open'] = '<li>';
-              					$config['num_tag_close'] = '</li>';
-              					$config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
-              					$config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
-              					$config['next_tag_open'] = "<li>";
-              					$config['next_tagl_close'] = "</li>";
-              					$config['prev_tag_open'] = "<li>";
-              					$config['prev_tagl_close'] = "</li>";
-              					$config['first_tag_open'] = "<li>";
-              					$config['first_tagl_close'] = "</li>";
-              					$config['last_tag_open'] = "<li>";
-              					$config['last_tagl_close'] = "</li>";
+      					if (is_array($countAll)){
+      						$config["total_rows"] = 0;
+      					}else{
+      						$config["total_rows"] = $this->user_model->record_count_searchPerson($name, $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
+      					}
+      					$config["per_page"] = 10;
+      					$config["uri_segment"] = 3;
+      					$choice = $config["total_rows"] / $config["per_page"];
+      					$config["num_links"] = round($choice);
+      					/* This Application Must Be Used With BootStrap 3 *  */
+      					$config['full_tag_open'] = "<ul class='pagination'>";
+      					$config['full_tag_close'] ="</ul>";
+      					$config['num_tag_open'] = '<li>';
+      					$config['num_tag_close'] = '</li>';
+      					$config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+      					$config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+      					$config['next_tag_open'] = "<li>";
+      					$config['next_tagl_close'] = "</li>";
+      					$config['prev_tag_open'] = "<li>";
+      					$config['prev_tagl_close'] = "</li>";
+      					$config['first_tag_open'] = "<li>";
+      					$config['first_tagl_close'] = "</li>";
+      					$config['last_tag_open'] = "<li>";
+      					$config['last_tagl_close'] = "</li>";
 
-              					$this->pagination->initialize($config);
+      					$this->pagination->initialize($config);
 
-              					$page = ($this->uri->segment(3))? $this->uri->segment(3) : 0;
-              					$data["groups"] = $this->user_model->searchPerson($config["per_page"], $page, $name, $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
-              					$data["links"] = $this->pagination->create_links();
+      					$page = ($this->uri->segment(3))? $this->uri->segment(3) : 0;
+      					$data["groups"] = $this->user_model->searchPerson($config["per_page"], $page, $name, $cleanPost['datefrom'], $cleanPost['dateto'], $cleanPost['order']);
+      					$data["links"] = $this->pagination->create_links();
 
                         if(!empty($cleanPost['download']) && empty($cleanPost['name']) && empty($cleanPost['datefrom']) && empty($cleanPost['dateto'])){
                              $this->user_model->createcsv("", $nowToday, "", $cleanPost['download']);
@@ -1205,61 +1205,143 @@ class Main extends CI_Controller {
 	    if(empty($data['role'])){
 	        redirect(site_url().'main/login/');
 	    }
-      $dataLevel = $this->userlevel->checkLevel($data['role']);
-      //check user level
+        $dataLevel = $this->userlevel->checkLevel($data['role']);
+        //check user level
 
-      //check is admin or not
-      if($dataLevel == "is_admin"){
+        //check is admin or not
+        if($dataLevel == "is_admin"){
 
-    	    $data['title'] = "Generate QR Code";
+            $data['title'] = "Generate QR Code";
 
-          $this->form_validation->set_rules('firstname', 'First Name', 'required');
-          $this->form_validation->set_rules('lastname', 'Last Name', 'required');
-          $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-          $this->form_validation->set_rules('role', 'role', 'required');
-          $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
-          $this->form_validation->set_rules('passconf', 'Password Confirmation', 'required|matches[password]');
+            $userDetails = $this->input->post('user-details');
 
-    	    $this->form_validation->set_rules('qr', 'Your Employee Full Name');
+            // generate the qr with user details
+            if(!empty($userDetails) && $userDetails == 1){
 
-    	    //check is admin or not
-            if (empty($_POST)) {
-                $this->load->view('header', $data);
-                $this->load->view('navbar', $data);
-                $this->load->view('container');
-                $this->load->view('generateqr', $data);
-                $this->load->view('footer');
+                $this->form_validation->set_rules('firstname', 'First Name', 'required');
+                $this->form_validation->set_rules('lastname', 'Last Name', 'required');
+                $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+                $this->form_validation->set_rules('role', 'role', 'required');
+                $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]');
+                $this->form_validation->set_rules('passconf', 'Password Confirmation', 'required|matches[password]');
+
+                $this->form_validation->set_rules('qr', 'Your Employee Full Name');
+
+                if($this->user_model->isDuplicate($this->input->post('email'))){
+                    $this->session->set_flashdata('flash_message', 'User email already exists');
+                    redirect(site_url().'main/generateqr');
+                }else{
+                    $this->load->library('password');
+                    $post = $this->input->post(NULL, TRUE);
+                    $cleanPost = $this->security->xss_clean($post);
+                    $cleanPost['qr'] = $this->input->post('firstname')." ".$this->input->post('lastname');
+                    $hashed = $this->password->create_hash($cleanPost['password']);
+                    $cleanPost['email'] = $this->input->post('email');
+                    $cleanPost['role'] = $this->input->post('role');
+                    $cleanPost['firstname'] = $this->input->post('firstname');
+                    $cleanPost['lastname'] = $this->input->post('lastname');
+                    $cleanPost['password'] = $hashed;
+                    unset($cleanPost['passconf']);
+
+                    $cleanPost['qr'] = $this->input->post('firstname').' '.$this->input->post('lastname');
+                    //insert to database
+                    if(!$this->user_model->addUser($cleanPost)){
+                        $this->session->set_flashdata('flash_message', 'There was a problem saving the QR.');
+                        redirect(site_url().'main/generateqr');
+                    }else{
+                        if(!$this->user_model->insertQr($cleanPost)){
+                            $this->session->set_flashdata('flash_message', 'There was a problem saving the QR.');
+                            redirect(site_url().'main/generateqr');
+                        }else{
+                            $this->load->view('header', $data);
+                            $this->load->view('navbar', $data);
+                            $this->load->view('container');
+                            $this->load->view('generateqr', $data, $cleanPost);
+                            $this->load->view('footer');
+                        }
+                    }
+                }
+
             }else{
-              if($this->user_model->isDuplicate($this->input->post('email'))){
-                  $this->session->set_flashdata('flash_message', 'User email already exists');
-                  redirect(site_url().'main/generateqr');
-              }else{
-                  $this->load->library('password');
-                  $post = $this->input->post(NULL, TRUE);
-                  $cleanPost = $this->security->xss_clean($post);
-                  $cleanPost['qr'] = $this->input->post('firstname')." ".$this->input->post('lastname');
-                  $hashed = $this->password->create_hash($cleanPost['password']);
-                  $cleanPost['email'] = $this->input->post('email');
-                  $cleanPost['role'] = $this->input->post('role');
-                  $cleanPost['firstname'] = $this->input->post('firstname');
-                  $cleanPost['lastname'] = $this->input->post('lastname');
-                  $cleanPost['password'] = $hashed;
-                  unset($cleanPost['passconf']);
+                $this->form_validation->set_rules('qr', 'Your Employee Full Name');
+                if (empty($_POST)) {
+                        $this->load->view('header', $data);
+                        $this->load->view('navbar', $data);
+                        $this->load->view('container');
+                        $this->load->view('generateqr', $data);
+                        $this->load->view('footer');
+                }else{
+                    $post = $this->input->post(NULL, TRUE);
+                    $cleanPost = $this->security->xss_clean($post);
+                    $cleanPost['qr'] = $this->input->post('qr');
 
-                  //insert to database
-                  if(!$this->user_model->addUser($cleanPost)){
-                      $this->session->set_flashdata('flash_message', 'There was a problem updating your profile');
-                      redirect(site_url().'main/generateqr');
-                  }else{
-                      $this->session->set_flashdata('success_message', 'Success adding user, and generate the QR.');
-                      $this->load->view('header', $data);
-                      $this->load->view('navbar', $data);
-                      $this->load->view('container');
-                      $this->load->view('generateqr', $data, $cleanPost);
-                      $this->load->view('footer');
-                  }
-              }
+                    if(!$this->user_model->insertQr($cleanPost)){
+                        $this->session->set_flashdata('flash_message', 'There was a problem saving the QR, and generate the QR.');
+                        redirect(site_url().'main/generateqr');
+                    }else{
+                        $this->load->view('header', $data);
+                        $this->load->view('navbar', $data);
+                        $this->load->view('container');
+                        $this->load->view('generateqr', $data, $cleanPost);
+                        $this->load->view('footer');
+                    }
+                }
             }
-      }
+        } // check user level
 	}
+
+    public function historyqr()
+    {
+        $data = $this->session->userdata;
+        $data['title'] = "History QR";
+        $data['groups'] = $this->user_model->getHistoryQrData();
+        $data['count'] = count($data['groups']);
+
+        //check user level
+        if(empty($data['role'])){
+            redirect(site_url().'main/login/');
+        }
+        $dataLevel = $this->userlevel->checkLevel($data['role']);
+        //check user level
+
+        //check is admin or not
+        if($dataLevel == "is_admin"){
+            $this->load->view('header', $data);
+            $this->load->view('navbar', $data);
+            $this->load->view('container');
+            $this->load->view('historyqr', $data);
+            $this->load->view('footer');
+        }else{
+            redirect(site_url().'main/');
+        }
+    }
+
+    public function deletehistoryqr($id)
+    {
+        $data = $this->session->userdata;
+        if(empty($data['role'])){
+            redirect(site_url().'main/login/');
+        }
+        $dataLevel = $this->userlevel->checkLevel($data['role']);
+        //check user level
+
+        //check is admin or not
+        if($dataLevel == "is_admin"){
+            $getDelete = $this->user_model->deleteHistoryQr($id);
+
+            $alldata = $this->user_model->getHistoryQrData();
+            $dataCount = count($alldata);
+            if($getDelete == false && $dataCount > 0){
+               $this->session->set_flashdata('flash_message', 'Error, cant delete the user!');
+            }
+            else if($getDelete == true && $dataCount > 0){
+               $this->session->set_flashdata('success_message', 'Delete user was successful.');
+            }else if($dataCount > 0){
+                $this->session->set_flashdata('flash_message', 'Someting Error!');
+            }
+            redirect(site_url().'main/historyqr/');
+        }else{
+            redirect(site_url().'main/');
+        }
+    }
 }

@@ -25,6 +25,7 @@
                         if($dataLevel == 'is_admin'){
                             echo'<li><a href="'.site_url().'main/employees"><i class="fa fa-user" aria-hidden="true"></i> Employee</a></li>';
                             echo'<li><a href="'.site_url().'main/generateqr"><i class="glyphicon glyphicon-qrcode" aria-hidden="true"></i> Generate QR</a></li>';
+                            echo'<li><a href="'.site_url().'main/historyqr"><i class="fa fa-history" aria-hidden="true"></i> History QR</a></li>';
                             echo'<li><a href="'.site_url().'main/settings"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> Settings</a></li>';
                         }
                         if($dataLevel == 'is_employee'){
@@ -43,6 +44,7 @@
                             </li>';
                         }
                     ?>
+                    <li><a data-toggle="modal" data-target="#myModal"><i class="fa fa-question-circle" aria-hidden="true"></i> About</a></li>
                   </ul>
 
                   <ul class="nav navbar-nav navbar-right">

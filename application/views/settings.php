@@ -1,6 +1,6 @@
 <div class="container">
 <div class="row">
-    <div class="col-lg-8 col-lg-offset-2">
+    <div class="col-md-4 col-lg-4 col-lg-offset-2">
         <h2>Settings</h2>
         <h5>Hello <span><?php echo $first_name; ?></span>.</h5>
         <hr>
@@ -63,12 +63,13 @@
               <option value="<?php echo $t['zone']; ?>"> <?php echo $t['zone']; ?></option>
           <?php } ?>
         </select>
-        <?php echo form_submit(array('value'=>'Save', 'name'=>'submit', 'class'=>'btn btn-primary btn-block')); ?>
-        <?php echo form_close(); ?>
-        <button onclick="myFunction()" class="btn btn-default btn-block" style="margin-top:5px;">Get Key</button>
+          <?php echo form_submit(array('value'=>'Save', 'name'=>'submit', 'class'=>'btn btn-primary btn-block', 'style' => 'margin-right:10px')); ?>
+          <?php echo form_close(); ?>
+          <button onclick="myFunction()" class="btn btn-default btn-block" style="margin-top: 10px">Get New Key</button>
     </div>
-    <div class="col-lg-8 col-lg-offset-2" style="margin-top:20px;">
+    <div class="col-md-4 col-lg-4">
         <h2>Share The Key</h2>
+        <br>
         <hr>
         <?php
         function generateRandomString() {
@@ -78,10 +79,10 @@
             return $randomString;
         }
 
-        echo '<div class="alert alert-info" role="alert">Share KEY via:</div>';
-        echo '<a href="whatsapp://send?text='.$key.'" data-action="share/whatsapp/share"><img src="https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/whatsapp-512.png" width="50"></a> ';
-        echo '<a href="mailto:?subject=Share KEY&amp;body=The Key is: '.$key.'" title="Share KEY"><img src="http://www.clker.com/cliparts/J/r/W/B/j/f/pink-email-icon-md.png" width="50"></a> ';
-        echo '<a class="copy-text" data-clipboard-target="#key" href="#"><img src="http://downloadicons.net/sites/default/files/copy-icon-68358.png" width="50"></a>';
+        echo '<div class="alert alert-info" role="alert">Share the KEY via:</div>';
+        echo '<a href="whatsapp://send?text='.$key.'" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a> ';
+        echo '<a href="mailto:?subject=Share KEY&amp;body=The Key is: '.$key.'" title="Share KEY"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> ';
+        echo '<a class="copy-text" data-clipboard-target="#key" href="#"><i class="fa fa-clipboard" aria-hidden="true"></i></a>';
         ?>
         <script>
         function myFunction() {

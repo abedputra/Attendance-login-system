@@ -3,6 +3,10 @@
     $dataLevel = $this->userlevel->checkLevel($role);
     //check user level
     ?>
+    <div class="alert alert-info alert-dismissible info-update" style="display: none;">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Info!</strong> There is the latest update for the system, please download from here <a href="https://github.com/abedputra/Attendance-login-system/" target="_blank">Github</a>.
+    </div>
     <div class="jumbotron">
         <div class="container">
           <h1>Hi, <?php echo $first_name; ?>!</h1>
