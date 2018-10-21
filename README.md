@@ -59,6 +59,9 @@ if($dataLevel == "is_admin"){
 # New Version
 Pro version for app, please download from here (https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqrpro
 
+# Migration from v1.0 to v2.0a
+Please update the SQL file.
+
 <br>
 <br>
 <br>
