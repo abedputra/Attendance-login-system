@@ -43,6 +43,19 @@ CREATE TABLE `absent` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history_qr`
+--
+
+CREATE TABLE `history_qr` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `settings`
 --
@@ -123,6 +136,12 @@ ALTER TABLE `tokens`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `history_qr`
+--
+ALTER TABLE `history_qr`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -152,6 +171,12 @@ ALTER TABLE `tokens`
 --
 ALTER TABLE `users`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;COMMIT;
+
+--
+-- AUTO_INCREMENT for table `history_qr`
+--
+ALTER TABLE `history_qr`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
