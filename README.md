@@ -60,7 +60,10 @@ if($dataLevel == "is_admin"){
 Pro version for app, please download from here (https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqrpro
 
 # Migration from v1.0 to v2.0a
-Please update the SQL file.
+Please update the SQL file. Please always backup your data first.
+<br>
+From v2.0a we add new table, for save history QR.
+
 
 <br>
 <br>
