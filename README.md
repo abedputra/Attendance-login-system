@@ -76,6 +76,8 @@ Please follow 2 steps:<br>
 1. Settings System Management
 Please check this<br>
 https://github.com/abedputra/Attendance-login-system/wiki/Settings-Management-System-%3F
+Please check this video how to istall the system
+https://www.youtube.com/watch?v=s8pZl5UoT40
 
 2. Settings Android Application<br>
 Please check this<br>
