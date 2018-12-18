@@ -75,7 +75,7 @@ From v2.0a we add new table, for save history QR.
 Please follow 2 steps:<br>
 1. Settings System Management
 Please check this<br>
-https://github.com/abedputra/Attendance-login-system/wiki/Settings-Management-System-%3F
+https://github.com/abedputra/Attendance-login-system/wiki/Settings-Management-System-%3F<br>
 Please check this video how to istall the system
 https://www.youtube.com/watch?v=s8pZl5UoT40
 
