@@ -5,6 +5,11 @@ Simple application for employee attendance with QR. <b>(You need install Employe
 
 Created By me [Abed Putra](http://abedputra.com)
 
+# Innovation Award
+![nominee](https://user-images.githubusercontent.com/11581453/53679420-937cb600-3d07-11e9-995d-cf60bd7a154e.gif)
+
+Visit : https://www.phpclasses.org/package/10634-PHP-Manage-and-authenticate-company-employees-users.html
+
 # Feature
 - Add user
 - Delete user
