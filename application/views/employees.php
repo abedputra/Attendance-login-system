@@ -1,3 +1,7 @@
+<?php 
+$colorRed = "style='color:red';";
+?>
+
 <div class="container">
         <h2>Employee</h2>
         <h5>Hello <span><?php echo $first_name; ?></span>.</h5>
@@ -137,18 +141,21 @@
                     <?php
                         foreach($groups as $row)
                         {
-                        echo '<tr>';
-                        echo '<td>'.$row->name.'</td>';
-                        echo '<td>'.$row->date.'</td>';
-                        echo '<td>'.$row->in_time.'</td>';
-                        echo '<td>'.$row->out_time.'</td>';
-                        echo '<td>'.$row->work_hour.'</td>';
-                        echo '<td>'.$row->over_time.'</td>';
-                        echo '<td>'.$row->late_time.'</td>';
-                        echo '<td>'.$row->early_out_time.'</td>';
-                        echo '<td>'.$row->in_location.'</td>';
-                        echo '<td>'.$row->out_location.'</td>';
-                        echo '</tr>';
+                          $lateTimeColor = $row->late_time!="00:00:00"?$colorRed:'';
+                          $earlyOutTimeColor = $row->early_out_time!="00:00:00"?$colorRed:'';
+
+                          echo '<tr>';
+                          echo '<td>'.$row->name.'</td>';
+                          echo '<td>'.$row->date.'</td>';
+                          echo '<td>'.$row->in_time.'</td>';
+                          echo '<td>'.$row->out_time.'</td>';
+                          echo '<td>'.$row->work_hour.'</td>';
+                          echo '<td>'.$row->over_time.'</td>';
+                          echo '<td ' .$lateTimeColor. '>'.$row->late_time.'</td>';
+                          echo '<td ' .$earlyOutTimeColor. '>'.$row->early_out_time.'</td>';
+                          echo '<td>'.$row->in_location.'</td>';
+                          echo '<td>'.$row->out_location.'</td>';
+                          echo '</tr>';
                         }
                     ?>
             </table>

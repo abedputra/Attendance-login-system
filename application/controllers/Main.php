@@ -882,7 +882,10 @@ class Main extends CI_Controller {
 
                          //Get over time
                         $get_over_time = gettime($change_out_time - strtotime($data['out']));
-                        $over_time = "$get_over_time[0]:$get_over_time[1]:$get_over_time[2]";
+                        if($change_out_time < strtotime($data['out']))
+                            $over_time = "00:00:00";
+                        else
+                            $over_time = "$get_over_time[0]:$get_over_time[1]:$get_over_time[2]";
 
                         //Early out time
                         $get_early_out_time = gettime(strtotime($data['out']) - $change_out_time);
@@ -926,6 +929,7 @@ class Main extends CI_Controller {
         if(empty($data['role'])){
 	        redirect(site_url().'main/login/');
 	    }
+        $this->load->helper('url');
 	    $dataLevel = $this->userlevel->checkLevel($data['role']);
 	    //check user level
 
@@ -990,7 +994,7 @@ class Main extends CI_Controller {
     public function employees()
 	  {
 	    $data = $this->session->userdata;
-      $this->load->library("pagination");
+        $this->load->library("pagination");
 
 	    //check user level
 	    if(empty($data['role'])){
@@ -1109,7 +1113,7 @@ class Main extends CI_Controller {
                         $this->load->view('footer');
                     }
                 }
-              }else if($dataLevel == "is_employee"){
+            }else if($dataLevel == "is_employee"){
         	        if (empty($_GET)) {
                         $data['groups'] = $this->user_model->getEmployeesPerson("date", $nowToday, $name);
     					          $data["links"] = "";

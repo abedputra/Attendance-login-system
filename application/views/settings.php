@@ -79,10 +79,17 @@
             return $randomString;
         }
 
+        // the QR
+        $qr = "{'url':'".base_url()."', 'key':'".$key."'}";
+
         echo '<div class="alert alert-info" role="alert">Share the KEY via:</div>';
         echo '<a href="whatsapp://send?text='.$key.'" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i></a> ';
         echo '<a href="mailto:?subject=Share KEY&amp;body=The Key is: '.$key.'" title="Share KEY"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> ';
         echo '<a class="copy-text" data-clipboard-target="#key" href="#"><i class="fa fa-clipboard" aria-hidden="true"></i></a>';
+
+        echo '<div style="margin-top:100px;">';
+        echo '<img class="img-responsive img-thumbnail" src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl='.$qr.'&choe=UTF-8" style="margin: 0 auto;display: block;">';
+        echo '</div>';
         ?>
         <script>
         function myFunction() {

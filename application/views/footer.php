@@ -79,6 +79,5 @@
             }
         });
     </script>
-    <script src="<?php echo base_url().'public/js/notif.js' ?>"></script>
     </body>
 </html>
