@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/11581453/33417023-8a7c889a-d5da-11e7-9fba-4ec8a925e7e0.png" width="150">
+<img src="https://user-images.githubusercontent.com/11581453/64755519-c24cd200-d55d-11e9-9011-fd3b11dfa56f.png" width="150">
 
 # Attendance login system
 Simple application for employee attendance with QR. <b>(You need install Employee Attendance with QR on Google Play for attendance) https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqr </b>
