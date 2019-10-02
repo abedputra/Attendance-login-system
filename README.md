@@ -6,7 +6,7 @@ Simple application for employee attendance with QR. <b>(You need install Employe
 Created By me [Abed Putra](http://abedputra.com)
 
 # Want to get an Android application source code?
-I want to sell the source code android application, if interested please email to abedputra@gmail.com. Thank you
+Please visit https://codecanyon.net/item/attendance-with-qr-code-android-system-management/24718396
 
 
 # Innovation Award
