@@ -3,7 +3,7 @@
 # Attendance login system
 Simple application for employee attendance with QR. <b>(You need install Employee Attendance with QR on Google Play for attendance) https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqr </b>
 
-Created By me [Abed Putra](http://abedputra.com)
+Created By me [Abed Putra](https://connectwithdev.com/)
 
 # Want to get an Android application source code?
 Please visit https://codecanyon.net/item/attendance-with-qr-code-android-system-management/24718396
