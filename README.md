@@ -123,7 +123,7 @@ Ported to CodeIgniter by [Richard Thornton](http://twitter.com/RichardThornton).
 CodeIgniter Curl Libraries by [Philip Sturgeon](https://github.com/philsturgeon).
 
 If you have question, please email me : abedputra@gmail.com
-Visit: http://abedputra.com
+Visit: https://connectwithdev.com/page/blog/setup-employee-attendance-with-qr
 
 # LICENSE
 The MIT License (MIT).
