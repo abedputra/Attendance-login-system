@@ -1,9 +1,13 @@
-<img src="https://user-images.githubusercontent.com/11581453/33417023-8a7c889a-d5da-11e7-9fba-4ec8a925e7e0.png" width="150">
+<img src="https://user-images.githubusercontent.com/11581453/64755519-c24cd200-d55d-11e9-9011-fd3b11dfa56f.png" width="150">
 
 # Attendance login system
 Simple application for employee attendance with QR. <b>(You need install Employee Attendance with QR on Google Play for attendance) https://play.google.com/store/apps/details?id=com.aandt.employeeattendancewithqr </b>
 
-Created By me [Abed Putra](http://abedputra.com)
+Created By me [Abed Putra](https://connectwithdev.com/)
+
+# Want to get an Android application source code?
+Please visit https://codecanyon.net/item/attendance-with-qr-code-android-system-management/24718396
+
 
 # Innovation Award
 ![nominee](https://user-images.githubusercontent.com/11581453/53679420-937cb600-3d07-11e9-995d-cf60bd7a154e.gif)
@@ -27,6 +31,8 @@ Visit : https://www.phpclasses.org/package/10634-PHP-Manage-and-authenticate-com
 - Generate QR for your employee name
 
 ![Attendance-login-system](https://user-images.githubusercontent.com/11581453/41508123-e4e1579e-7269-11e8-9493-3e6c3a7e9b9c.png)
+
+![Attendance-login-system](https://lh3.googleusercontent.com/cdpTV3RCZImsVXVtgQbEpQPbcbKMtPAMra1Vi8HmS8Q3475Gu3q2VvjnJfOxeryW6qk) ![Attendance-login-system](https://lh3.googleusercontent.com/h62E5mMfjdrxdtIlq6PgACwU-i3OwdW1GwsOlvuf3fvPgC42_gSZd5KrdjCjYDXWOx8) ![Attendance-login-system](https://lh3.googleusercontent.com/dwfjhBlvbPjtiuwrPup-_er76_RIsJrueGAvwMTsiDKA8qUasufl9BXebAi3GHauEt5z) 
 
 # User Level
 - is_admin
@@ -117,7 +123,7 @@ Ported to CodeIgniter by [Richard Thornton](http://twitter.com/RichardThornton).
 CodeIgniter Curl Libraries by [Philip Sturgeon](https://github.com/philsturgeon).
 
 If you have question, please email me : abedputra@gmail.com
-Visit: http://abedputra.com
+Visit: https://connectwithdev.com/page/blog/setup-employee-attendance-with-qr
 
 # LICENSE
 The MIT License (MIT).
