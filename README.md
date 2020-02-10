@@ -30,9 +30,11 @@ Visit : https://www.phpclasses.org/package/10634-PHP-Manage-and-authenticate-com
 - Review your employee attendance for 1 week, 1 month, 1 Years etc
 - Generate QR for your employee name
 
-![Attendance-login-system](https://user-images.githubusercontent.com/11581453/41508123-e4e1579e-7269-11e8-9493-3e6c3a7e9b9c.png)
+![system attendance qr code](https://user-images.githubusercontent.com/11581453/74131506-64f9a180-4c1f-11ea-8aea-b4847f02d0ec.png)
 
-![Attendance-login-system](https://lh3.googleusercontent.com/cdpTV3RCZImsVXVtgQbEpQPbcbKMtPAMra1Vi8HmS8Q3475Gu3q2VvjnJfOxeryW6qk) ![Attendance-login-system](https://lh3.googleusercontent.com/h62E5mMfjdrxdtIlq6PgACwU-i3OwdW1GwsOlvuf3fvPgC42_gSZd5KrdjCjYDXWOx8) ![Attendance-login-system](https://lh3.googleusercontent.com/dwfjhBlvbPjtiuwrPup-_er76_RIsJrueGAvwMTsiDKA8qUasufl9BXebAi3GHauEt5z) 
+
+<img src="https://user-images.githubusercontent.com/11581453/74131411-367bc680-4c1f-11ea-8409-d9a8ea6bd5fb.png" width="300">  <img src="https://user-images.githubusercontent.com/11581453/74131417-38de2080-4c1f-11ea-9cb4-8cef333726b0.png" width="300">  <img src="https://user-images.githubusercontent.com/11581453/74131418-3a0f4d80-4c1f-11ea-9b08-76d69042cfe1.png" width="300">
+
 
 # User Level
 - is_admin
