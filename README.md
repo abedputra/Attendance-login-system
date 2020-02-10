@@ -33,13 +33,12 @@ Visit : https://www.phpclasses.org/package/10634-PHP-Manage-and-authenticate-com
 ![system attendance qr code](https://user-images.githubusercontent.com/11581453/74131506-64f9a180-4c1f-11ea-8aea-b4847f02d0ec.png)
 
 
-<img src="https://user-images.githubusercontent.com/11581453/74131411-367bc680-4c1f-11ea-8409-d9a8ea6bd5fb.png" width="300">  <img src="https://user-images.githubusercontent.com/11581453/74131417-38de2080-4c1f-11ea-9cb4-8cef333726b0.png" width="300">  <img src="https://user-images.githubusercontent.com/11581453/74131418-3a0f4d80-4c1f-11ea-9b08-76d69042cfe1.png" width="300">
+<img src="https://user-images.githubusercontent.com/11581453/74131411-367bc680-4c1f-11ea-8409-d9a8ea6bd5fb.png" width="200">  <img src="https://user-images.githubusercontent.com/11581453/74131417-38de2080-4c1f-11ea-9cb4-8cef333726b0.png" width="200">  <img src="https://user-images.githubusercontent.com/11581453/74131418-3a0f4d80-4c1f-11ea-9b08-76d69042cfe1.png" width="200">
 
 
 # User Level
 - is_admin
-- is_author
-- is_employee
+- is_user (Your employee or student)
 - is_subscriber
 
 # Wiki
