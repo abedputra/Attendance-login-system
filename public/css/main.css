@@ -69,3 +69,20 @@ footer{
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+.center-vertical{
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+
+.background-login{
+    background: #484848;
+    color: #FFF;
+}

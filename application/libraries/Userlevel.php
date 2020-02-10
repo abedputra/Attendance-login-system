@@ -5,28 +5,20 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class UserLevel{
+class UserLevel
+{
 
-    public function checkLevel($role) {
-        if(!empty($role))
-        {
-            if($role==1)
-            {
+    public function checkLevel($role)
+    {
+        if (!empty($role)) {
+            if ($role == 1) {
                 $userLevel = 'is_admin';
-            }
-            elseif($role==2)
-            {
-                $userLevel = 'is_author';
-            }
-            elseif($role==3)
-            {
-                $userLevel = 'is_employee';
-            }
-            elseif($role==4)
-            {
+            } elseif ($role == 2) {
+                $userLevel = 'is_user';
+            } elseif ($role == 3) {
                 $userLevel = 'is_subscriber';
             }
-        }else{
+        } else {
             echo "Empty Role";
             return false;
         }

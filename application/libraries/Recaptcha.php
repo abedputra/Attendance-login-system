@@ -8,13 +8,15 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ReCaptcha {
+class ReCaptcha
+{
 
-    private $dataSitekey = ""; //Your SiteKey
-    private $lang = "en";
-    public $secret = ""; //Secret
+    public $secret = ""; //Your SiteKey
+    private $dataSitekey = "";
+    private $lang = "en"; //Secret
 
-    public function render() {
+    public function render()
+    {
         $return = '<div class="g-recaptcha" data-sitekey="' . $this->dataSitekey . '"></div>
             <script src="https://www.google.com/recaptcha/api.js?hl=' . $this->lang . '" async defer></script>';
         return $return;

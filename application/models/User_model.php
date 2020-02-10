@@ -1,12 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class User_model extends CI_Model {
+class User_model extends CI_Model
+{
 
     public $status;
     public $roles;
 
-    function __construct(){
+    function __construct()
+    {
         // Call the Model constructor
         parent::__construct();
         $this->status = $this->config->item('status');
@@ -16,17 +18,17 @@ class User_model extends CI_Model {
 
     public function insertUser($d)
     {
-            $string = array(
-                'first_name'=>$d['firstname'],
-                'last_name'=>$d['lastname'],
-                'email'=>$d['email'],
-                'role'=>$this->roles[0],
-                'status'=>$this->status[0],
-                'banned_users'=>$this->banned_users[0],
-            );
-            $q = $this->db->insert_string('users',$string);
-            $this->db->query($q);
-            return $this->db->insert_id();
+        $string = array(
+            'first_name' => $d['firstname'],
+            'last_name' => $d['lastname'],
+            'email' => $d['email'],
+            'role' => $this->roles[0],
+            'status' => $this->status[0],
+            'banned_users' => $this->banned_users[0],
+        );
+        $q = $this->db->insert_string('users', $string);
+        $this->db->query($q);
+        return $this->db->insert_id();
     }
 
     public function isDuplicate($email)
@@ -41,11 +43,11 @@ class User_model extends CI_Model {
         $date = date('Y-m-d');
 
         $string = array(
-                'token'=> $token,
-                'user_id'=>$user_id,
-                'created'=>$date
-            );
-        $query = $this->db->insert_string('tokens',$string);
+            'token' => $token,
+            'user_id' => $user_id,
+            'created' => $date
+        );
+        $query = $this->db->insert_string('tokens', $string);
         $this->db->query($query);
         return $token . $user_id;
 
@@ -53,14 +55,14 @@ class User_model extends CI_Model {
 
     public function isTokenValid($token)
     {
-       $tkn = substr($token,0,30);
-       $uid = substr($token,30);
+        $tkn = substr($token, 0, 30);
+        $uid = substr($token, 30);
 
         $q = $this->db->get_where('tokens', array(
             'tokens.token' => $tkn,
             'tokens.user_id' => $uid), 1);
 
-        if($this->db->affected_rows() > 0){
+        if ($this->db->affected_rows() > 0) {
             $row = $q->row();
 
             $created = $row->created;
@@ -68,14 +70,14 @@ class User_model extends CI_Model {
             $today = date('Y-m-d');
             $todayTS = strtotime($today);
 
-            if($createdTS != $todayTS){
+            if ($createdTS != $todayTS) {
                 return false;
             }
 
             $user_info = $this->getUserInfo($row->user_id);
             return $user_info;
 
-        }else{
+        } else {
             return false;
         }
 
@@ -84,11 +86,11 @@ class User_model extends CI_Model {
     public function getUserInfo($id)
     {
         $q = $this->db->get_where('users', array('id' => $id), 1);
-        if($this->db->affected_rows() > 0){
+        if ($this->db->affected_rows() > 0) {
             $row = $q->row();
             return $row;
-        }else{
-            error_log('no user found getUserInfo('.$id.')');
+        } else {
+            error_log('no user found getUserInfo(' . $id . ')');
             return false;
         }
     }
@@ -98,17 +100,14 @@ class User_model extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('users');
-        $this->db->where('email', $email );
+        $this->db->where('email', $email);
         $query = $this->db->get();
 
-        if ( $query->num_rows() > 0 )
-        {
+        if ($query->num_rows() > 0) {
             $row = $query->row_array();
             return $row;
-        }
-        else
-        {
-            error_log('no user found getUserAllData('.$email.')');
+        } else {
+            error_log('no user found getUserAllData(' . $email . ')');
             return false;
         }
     }
@@ -116,29 +115,29 @@ class User_model extends CI_Model {
     public function updateUserInfo($post)
     {
         $data = array(
-               'password' => $post['password'],
-               'last_login' => date('Y-m-d h:i:s A'),
-               'status' => $this->status[1]
-            );
+            'password' => $post['password'],
+            'last_login' => date('Y-m-d h:i:s A'),
+            'status' => $this->status[1]
+        );
         $this->db->where('id', $post['user_id']);
         $this->db->update('users', $data);
         $this->db->trans_complete();
 
         $success = $this->db->affected_rows();
 
-        if(!$success){
+        if (!$success) {
             // any trans error?
             if ($this->db->trans_status() === FALSE) {
                 return false;
             }
             $user_info = $this->getUserInfo($post['user_id']);
             return $user_info;
-        }else{
+        } else {
             $user_info = $this->getUserInfo($post['user_id']);
             return $user_info;
         }
 
-        
+
     }
 
     public function checkLogin($post)
@@ -150,16 +149,15 @@ class User_model extends CI_Model {
         $userInfo = $query->row();
         $count = $query->num_rows();
 
-        if($count == 1){
-            if(!$this->password->validate_password($post['password'], $userInfo->password))
-            {
-                error_log('Unsuccessful login attempt('.$post['email'].')');
+        if ($count == 1) {
+            if (!$this->password->validate_password($post['password'], $userInfo->password)) {
+                error_log('Unsuccessful login attempt(' . $post['email'] . ')');
                 return false;
-            }else{
+            } else {
                 $this->updateLoginTime($userInfo->id);
             }
-        }else{
-            error_log('Unsuccessful login attempt('.$post['email'].')');
+        } else {
+            error_log('Unsuccessful login attempt(' . $post['email'] . ')');
             return false;
         }
 
@@ -177,11 +175,11 @@ class User_model extends CI_Model {
     public function getUserInfoByEmail($email)
     {
         $q = $this->db->get_where('users', array('email' => $email), 1);
-        if($this->db->affected_rows() > 0){
+        if ($this->db->affected_rows() > 0) {
             $row = $q->row();
             return $row;
-        }else{
-            error_log('no user found getUserInfo('.$email.')');
+        } else {
+            error_log('no user found getUserInfo(' . $email . ')');
             return false;
         }
     }
@@ -194,7 +192,7 @@ class User_model extends CI_Model {
 
         $success = $this->db->affected_rows();
 
-        if(!$success){
+        if (!$success) {
             // any trans error?
             if ($this->db->trans_status() === FALSE) {
                 return false;
@@ -207,18 +205,18 @@ class User_model extends CI_Model {
     //add user login
     public function addUser($d)
     {
-            $string = array(
-                'first_name'=>$d['firstname'],
-                'last_name'=>$d['lastname'],
-                'email'=>$d['email'],
-                'password'=>$d['password'],
-                'role'=>$d['role'],
-                'status'=>$this->status[1],
-                'banned_users'=>$this->banned_users[0]
-            );
-            $q = $this->db->insert_string('users',$string);
-            $this->db->query($q);
-            return $this->db->insert_id();
+        $string = array(
+            'first_name' => $d['firstname'],
+            'last_name' => $d['lastname'],
+            'email' => $d['email'],
+            'password' => $d['password'],
+            'role' => $d['role'],
+            'status' => $this->status[1],
+            'banned_users' => $this->banned_users[0]
+        );
+        $q = $this->db->insert_string('users', $string);
+        $this->db->query($q);
+        return $this->db->insert_id();
     }
 
     //update profile user
@@ -230,7 +228,7 @@ class User_model extends CI_Model {
 
         $success = $this->db->affected_rows();
 
-        if(!$success){
+        if (!$success) {
             // any trans error?
             if ($this->db->trans_status() === FALSE) {
                 return false;
@@ -243,13 +241,14 @@ class User_model extends CI_Model {
     //update user level
     public function updateUserLevel($post)
     {
+
         $this->db->where('email', $post['email']);
         $this->db->update('users', array('role' => $post['level']));
         $this->db->trans_complete();
 
         $success = $this->db->affected_rows();
 
-        if(!$success){
+        if (!$success) {
             // any trans error?
             if ($this->db->trans_status() === FALSE) {
                 return false;
@@ -268,7 +267,7 @@ class User_model extends CI_Model {
 
         $success = $this->db->affected_rows();
 
-        if(!$success){
+        if (!$success) {
             // any trans error?
             if ($this->db->trans_status() === FALSE) {
                 return false;
@@ -285,6 +284,14 @@ class User_model extends CI_Model {
         return $query->result();
     }
 
+    //get email user by Id
+    public function getUserDataById($id)
+    {
+        $this->db->where('id', $id);
+        $query = $this->db->get('users');
+        return $query->result();
+    }
+
     //delete user
     public function deleteUser($id)
     {
@@ -293,14 +300,13 @@ class User_model extends CI_Model {
 
         if ($this->db->affected_rows() == '1') {
             return TRUE;
-        }
-        else {
+        } else {
             return FALSE;
         }
     }
 
     //how many employee
-    public function getAllEmployee()
+    public function getHowManyPeople()
     {
         $this->db->select('*');
         $this->db->from('settings');
@@ -317,21 +323,18 @@ class User_model extends CI_Model {
         if ($whereb != '') $where[$colb] = $whereb;
 
 
-        if (empty($where))
-        {
-        return array(); // ... or NULL
-        }
-        else
-        {
-        $query = $this->db->get_where('absent', $where);
-        $count = $query->num_rows();
-        return $count;
+        if (empty($where)) {
+            return array(); // ... or NULL
+        } else {
+            $query = $this->db->get_where('absent', $where);
+            $count = $query->num_rows();
+            return $count;
         }
 
     }
 
     //get employees
-    public function getEmployees($col, $where)
+    public function getPeopleToDay($col, $where)
     {
         $this->db->select('*');
         $this->db->from('absent');
@@ -349,13 +352,10 @@ class User_model extends CI_Model {
         $this->db->where($colb, $whereb);
         $query = $this->db->get();
 
-        if ( $query->num_rows() > 0 )
-        {
+        if ($query->num_rows() > 0) {
             $row = $query->row_array();
             return $row["in_time"];
-        }
-        else
-        {
+        } else {
             return false;
         }
 
@@ -364,19 +364,19 @@ class User_model extends CI_Model {
     public function insertAbsent($alldata)
     {
         $string = array(
-            'name'=> $alldata['name'],
-            'date'=> $alldata['date'],
-            'late_time'=> $alldata['late_time'],
-            'in_time'=> $alldata['in_time'],
-            'in_location'=> $alldata['in_location']
+            'name' => $alldata['name'],
+            'date' => $alldata['date'],
+            'late_time' => $alldata['late_time'],
+            'in_time' => $alldata['in_time'],
+            'in_location' => $alldata['in_location']
         );
-        $q = $this->db->insert_string('absent',$string);
+        $q = $this->db->insert_string('absent', $string);
         $this->db->query($q);
         $check = $this->db->insert_id();
 
-        if ($check){
+        if ($check) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
@@ -388,11 +388,11 @@ class User_model extends CI_Model {
         $date = $alldata['date'];
 
         $string = array(
-            'out_location'=> $alldata['out_location'],
-            'out_time'=> $alldata['out_time'],
-            'work_hour'=> $alldata['work_hour'],
-            'over_time'=> $alldata['over_time'],
-            'early_out_time'=> $alldata['early_out_time']
+            'out_location' => $alldata['out_location'],
+            'out_time' => $alldata['out_time'],
+            'work_hour' => $alldata['work_hour'],
+            'over_time' => $alldata['over_time'],
+            'early_out_time' => $alldata['early_out_time']
         );
         $this->db->where('name', $name);
         $this->db->where('date', $date);
@@ -401,9 +401,9 @@ class User_model extends CI_Model {
 
         $success = $this->db->affected_rows();
 
-        if ($success){
+        if ($success) {
             return true;
-        }else{
+        } else {
             // any trans error?
             if ($this->db->trans_status() === FALSE) {
                 return false;
@@ -430,187 +430,15 @@ class User_model extends CI_Model {
 
         $success = $this->db->affected_rows();
 
-        if(!$success){
+        if (!$success) {
             // any trans error?
             if ($this->db->trans_status() === FALSE) {
                 return false;
             }
             return true;
-        }else{
+        } else {
             return true;
         }
-        
-    }
-
-    //get employees person
-    public function getEmployeesPerson($col, $where, $name)
-    {
-        $this->db->select('*');
-        $this->db->from('absent');
-        $this->db->where('name', $name);
-        $this->db->where($col, $where);
-        $query = $this->db->get();
-        return $query->result();
-    }
-
-    public function searchPerson($limit, $start, $name, $datefrom, $dateto, $order)
-    {
-	  $this->db->limit($limit, $start);
-      $where = array();
-
-      if ($datefrom != '') $where['date >='] = $datefrom;
-      if ($dateto != '') $where['date <='] = $dateto;
-
-      if (empty($where))
-      {
-        return array(); // ... or NULL
-      }
-      else
-      {
-        if($order != ''){
-            $this->db->order_by($order);
-        }else{
-            $this->db->order_by("date", "DESC");
-        }
-
-        if($datefrom != '' && $dateto != ''){
-            $this->db->like('name',$name);
-            $query = $this->db->get_where('absent', "date >= '$datefrom' AND date <= '$dateto'");
-        }elseif($name != '' && empty($datefrom) && empty($dateto)){
-            $this->db->like('name',$name);
-            $query = $this->db->get_where('absent');
-        }else{
-            $query = $this->db->get_where('absent', $where);
-        }
-        return $query->result();
-      }
-    }
-
-	public function record_count_searchPerson($name, $datefrom, $dateto, $order) {
-        // return $this->db->count_all("Country");
-		$where = array();
-
-      if ($datefrom != '') $where['date >='] = $datefrom;
-      if ($dateto != '') $where['date <='] = $dateto;
-
-      if (empty($where))
-      {
-        return array(); // ... or NULL
-      }
-      else
-      {
-        if($order != ''){
-            $this->db->order_by($order);
-        }else{
-            $this->db->order_by("date", "DESC");
-        }
-
-        if($name != '' && $datefrom != '' && $dateto != ''){
-            $this->db->like('name',$name);
-            $query = $this->db->get_where('absent', "date >= '$datefrom' AND date <= '$dateto'");
-        }elseif($name != '' && empty($datefrom) && empty($dateto)){
-            $this->db->like('name',$name);
-            $query = $this->db->get_where('absent');
-        }else{
-            $query = $this->db->get_where('absent', $where);
-        }
-        return $query->num_rows();
-      }
-    }
-
-	public function record_count($name, $datefrom, $dateto, $order) {
-        // return $this->db->count_all("Country");
-		$where = array();
-
-      if ($name != '') $where['name'] = $name;
-      if ($datefrom != '') $where['date >='] = $datefrom;
-      if ($dateto != '') $where['date <='] = $dateto;
-
-      if (empty($where))
-      {
-        return array(); // ... or NULL
-      }
-      else
-      {
-        if($order != ''){
-            $this->db->order_by($order);
-        }else{
-            $this->db->order_by("date", "DESC");
-        }
-
-        if($name != '' && $datefrom != '' && $dateto != ''){
-            $this->db->like('name',$name);
-            $query = $this->db->get_where('absent', "date >= '$datefrom' AND date <= '$dateto'");
-        }elseif($name != '' && empty($datefrom) && empty($dateto)){
-            $this->db->like('name',$name);
-            $query = $this->db->get_where('absent');
-        }else{
-            $query = $this->db->get_where('absent', $where);
-        }
-        return $query->num_rows();
-      }
-    }
-
-    public function search($limit, $start, $name, $datefrom, $dateto, $order) {
-        $this->db->limit($limit, $start);
-		$where = array();
-
-        if ($name != '') $where['name'] = $name;
-        if ($datefrom != '') $where['date >='] = $datefrom;
-        if ($dateto != '') $where['date <='] = $dateto;
-
-        if (empty($where))
-        {
-        return array(); // ... or NULL
-        }
-        else
-        {
-        if($order != ''){
-            $this->db->order_by($order);
-        }else{
-            $this->db->order_by("date", "DESC");
-        }
-
-        if($name != '' && $datefrom != '' && $dateto != ''){
-            $this->db->like('name',$name);
-            $querys = $this->db->get_where('absent', "date >= '$datefrom' AND date <= '$dateto'");
-        }elseif($name != '' && empty($datefrom) && empty($dateto)){
-            $this->db->like('name',$name);
-            $querys = $this->db->get_where('absent');
-        }else{
-            $querys = $this->db->get_where('absent', $where);
-        }
-        return $query = $querys->result();
-        }
-
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return false;
-   }
-
-    function createcsv($name, $datefrom, $dateto, $download)
-    {
-        $this->load->dbutil();
-        $this->load->helper('file');
-        $this->load->helper('download');
-        $delimiter = ",";
-        $newline = "\r\n";
-        $filename = "Data-Employee.".$download;
-
-        if ((($name != '') && ($datefrom == '') && ($dateto == ''))){$query = "SELECT * FROM absent Where name LIKE '%".$name."%' order by date ASC";}
-        else if(($name == '') && ($datefrom != '') && ($dateto != '')){ $query = "SELECT * FROM absent Where `date` BETWEEN '$datefrom' AND '$dateto' order by date ASC";}
-        else if(($name == '') && ($datefrom != '') && ($dateto == '')){ $query = "SELECT * FROM absent Where date >= '$datefrom' order by date ASC";}
-        else if(($name == '') && ($datefrom == '') && ($dateto != '')){ $query = "SELECT * FROM absent Where Where date <= '$dateto' order by date ASC";}
-        else if (($name != '') && ($datefrom != '') && ($dateto != '')) {$query = "SELECT * FROM absent Where name LIKE '%".$name."%' AND `date` BETWEEN '$datefrom'  AND  '$dateto' order by date ASC";}
-        else{$query = "SELECT * FROM absent order by date ASC";}
-
-        $result = $this->db->query($query);
-        $data = $this->dbutil->csv_from_result($result, $delimiter, $newline);
-        force_download($filename, $data);
 
     }
 
@@ -623,7 +451,7 @@ class User_model extends CI_Model {
 
         $success = $this->db->affected_rows();
 
-        if(!$success){
+        if (!$success) {
             // any trans error?
             if ($this->db->trans_status() === FALSE) {
                 return false;
@@ -636,15 +464,15 @@ class User_model extends CI_Model {
     public function insertQr($alldata)
     {
         $string = array(
-            'name'=> $alldata['qr'],
+            'name' => $alldata['qr'],
         );
-        $q = $this->db->insert_string('history_qr',$string);
+        $q = $this->db->insert_string('history_qr', $string);
         $this->db->query($q);
         $check = $this->db->insert_id();
 
-        if ($check){
+        if ($check) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
@@ -665,8 +493,7 @@ class User_model extends CI_Model {
 
         if ($this->db->affected_rows() == '1') {
             return TRUE;
-        }
-        else {
+        } else {
             return FALSE;
         }
     }
