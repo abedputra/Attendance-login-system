@@ -26,13 +26,19 @@ $dataLevel = $this->userlevel->checkLevel($role);
                             Dashboard</a></li>
                     <?php
                     if ($dataLevel === 'is_admin') {
-                        echo '<li><a href="' . site_url() . 'report/"><i class="fa fa-database" aria-hidden="true"></i> Report</a></li>';
-                        echo '<li><a href="' . site_url() . 'qr/generateqr"><i class="glyphicon glyphicon-qrcode" aria-hidden="true"></i> Generate QR</a></li>';
-                        echo '<li><a href="' . site_url() . 'qr/historyqr"><i class="fa fa-history" aria-hidden="true"></i> History QR</a></li>';
-                        echo '<li><a href="' . site_url() . 'settings/"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> Settings</a></li>';
+                        echo '<li><a href="' . site_url() . 'report/"><i class="fa fa-table" aria-hidden="true"></i> Report</a></li>';
+                        echo '
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-qrcode" aria-hidden="true"></i> QR <span class="caret"></span></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="' . site_url() . 'qr/generateQr">Generate</a></li>
+                                <li><a href="' . site_url() . 'qr/historyQr">History</a></li>
+                              </ul>
+                            </li>';
+                        echo '<li><a href="' . site_url() . 'settings/"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a></li>';
                     }
-                    if ($dataLevel === 'is_people') {
-                        echo '<li><a href="' . site_url() . 'report/"><i class="fa fa-database" aria-hidden="true"></i> Report</a></li>';
+                    if ($dataLevel === 'is_user') {
+                        echo '<li><a href="' . site_url() . 'report/"><i class="fa fa-table" aria-hidden="true"></i> Report</a></li>';
                     }
                     if ($dataLevel === 'is_admin') {
                         echo '
@@ -40,7 +46,7 @@ $dataLevel = $this->userlevel->checkLevel($role);
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-users" aria-hidden="true"></i> Users <span class="caret"></span></a>
                               <ul class="dropdown-menu">
                                 <li><a href="' . site_url() . 'user">Users List</a></li>
-                                <li><a href="' . site_url() . 'user/adduser">Add User</a></li>
+                                <li><a href="' . site_url() . 'user/add">Add User</a></li>
                               </ul>
                             </li>';
                     }
@@ -56,8 +62,8 @@ $dataLevel = $this->userlevel->checkLevel($role);
                                                     aria-hidden="true"></i> <?php echo $first_name; ?> <span
                                     class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="<?php echo site_url(); ?>profileuser"><?php echo $email; ?></a></li>
-                            <li><a href="<?php echo site_url(); ?>profileuser/edituser">Edit Profile</a></li>
+                            <li><a href="<?php echo site_url(); ?>profileUser"><?php echo $email; ?></a></li>
+                            <li><a href="<?php echo site_url(); ?>profileUser/edit">Edit Profile</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="<?php echo base_url() . 'main/logout' ?>">Log Out</a></li>
                         </ul>

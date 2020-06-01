@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/system-management/'; //change link
+$config['base_url'] = 'http://192.168.43.20/system-management/'; //change link
 
 /*
 |--------------------------------------------------------------------------
@@ -530,7 +530,7 @@ $config['proxy_ips'] = '';
 | Roles user and status user
 |
 */
-$config['roles'] = array('4', '1');
+$config['roles'] = array('3', '1');
 $config['status'] = array('pending', 'approved');
 $config['banned_users'] = array('unban', 'ban');
 

@@ -3,14 +3,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Qr extends CI_Controller
 {
-
     public $status;
     public $roles;
 
-    function __construct()
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
         parent::__construct();
-        $this->load->model('User_model', 'user_model', TRUE);
+        $this->load->model('QrModel', 'QrModel', TRUE);
+        $this->load->model('MainModel', 'MainModel', TRUE);
         $this->load->library('form_validation');
         $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
         $this->status = $this->config->item('status');
@@ -18,7 +23,12 @@ class Qr extends CI_Controller
         $this->load->library('userlevel');
     }
 
-    public function generateqr()
+    /**
+     * View generate qr page.
+     *
+     * @return void
+     */
+    public function generateQr()
     {
         $data = $this->session->userdata;
 
@@ -30,9 +40,9 @@ class Qr extends CI_Controller
         //check user level
 
         //check is admin or not
-        if ($dataLevel == "is_admin") {
+        if ($dataLevel == 'is_admin') {
 
-            $data['title'] = "Generate QR Code";
+            $data['title'] = 'Generate QR Code';
             $userDetails = $this->input->post('user-details');
             // generate the qr with user details
             if (!empty($userDetails) && $userDetails == 1) {
@@ -46,15 +56,16 @@ class Qr extends CI_Controller
 
                 $this->form_validation->set_rules('qr', 'Your Employee Full Name');
 
-                if ($this->user_model->isDuplicate($this->input->post('email'))) {
+                if ($this->MainModel->isDuplicate($this->input->post('email'))) {
                     $this->session->set_flashdata('flash_message', 'User email already exists');
-                    redirect(site_url() . 'qr/generateqr');
+                    redirect(site_url() . 'qr/generateQr');
                 } else {
                     $this->load->library('password');
                     $post = $this->input->post(NULL, TRUE);
                     $cleanPost = $this->security->xss_clean($post);
-                    $cleanPost['qr'] = $this->input->post('firstname') . " " . $this->input->post('lastname');
+                    $cleanPost['qr'] = $this->input->post('firstname') . ' ' . $this->input->post('lastname');
                     $hashed = $this->password->create_hash($cleanPost['password']);
+
                     $cleanPost['email'] = $this->input->post('email');
                     $cleanPost['role'] = $this->input->post('role');
                     $cleanPost['firstname'] = $this->input->post('firstname');
@@ -63,19 +74,19 @@ class Qr extends CI_Controller
                     unset($cleanPost['passconf']);
 
                     $cleanPost['qr'] = $this->input->post('firstname') . ' ' . $this->input->post('lastname');
-                    //insert to database
-                    if (!$this->user_model->addUser($cleanPost)) {
+                    // Insert to database
+                    if (!$this->MainModel->addUser($cleanPost)) {
                         $this->session->set_flashdata('flash_message', 'There was a problem saving the QR.');
-                        redirect(site_url() . 'qr/generateqr');
+                        redirect(site_url() . 'qr/generateQr');
                     } else {
-                        if (!$this->user_model->insertQr($cleanPost)) {
+                        if (!$this->QrModel->insertQr($cleanPost)) {
                             $this->session->set_flashdata('flash_message', 'There was a problem saving the QR.');
-                            redirect(site_url() . 'qr/generateqr');
+                            redirect(site_url() . 'qr/generateQr');
                         } else {
                             $this->load->view('template/header', $data);
                             $this->load->view('template/navbar', $data);
                             $this->load->view('template/container');
-                            $this->load->view('qr/generateqr', $data, $cleanPost);
+                            $this->load->view('qr/generate_qr', $data, $cleanPost);
                         }
                     }
                 }
@@ -86,34 +97,39 @@ class Qr extends CI_Controller
                     $this->load->view('template/header', $data);
                     $this->load->view('template/navbar', $data);
                     $this->load->view('template/container');
-                    $this->load->view('qr/generateqr', $data);
+                    $this->load->view('qr/generate_qr', $data);
                 } else {
-                    if ($this->input->post('qr') == "") {
+                    if ($this->input->post('qr') == '') {
                         $this->session->set_flashdata('flash_message', 'Please fill the name of user.');
-                        redirect(site_url() . 'qr/generateqr');
+                        redirect(site_url() . 'qr/generateQr');
                     }
                     $post = $this->input->post(NULL, TRUE);
                     $cleanPost = $this->security->xss_clean($post);
                     $cleanPost['qr'] = $this->input->post('qr');
 
-                    if (!$this->user_model->insertQr($cleanPost)) {
+                    if (!$this->QrModel->insertQr($cleanPost)) {
                         $this->session->set_flashdata('flash_message', 'There was a problem saving the QR, and generate the QR.');
-                        redirect(site_url() . 'qr/generateqr');
+                        redirect(site_url() . 'qr/generateQr');
                     } else {
                         $this->load->view('template/header', $data);
                         $this->load->view('template/navbar', $data);
                         $this->load->view('template/container');
-                        $this->load->view('qr/generateqr', $data, $cleanPost);
+                        $this->load->view('qr/generate_qr', $data, $cleanPost);
                     }
                 }
             }
-        } // check user level
+        }
     }
 
-    public function historyqr()
+    /**
+     * View history page.
+     *
+     * @return void
+     */
+    public function historyQr()
     {
         $data = $this->session->userdata;
-        $data['title'] = "History QR";
+        $data['title'] = 'History QR';
 
         //check user level
         if (empty($data['role'])) {
@@ -122,54 +138,68 @@ class Qr extends CI_Controller
         $dataLevel = $this->userlevel->checkLevel($data['role']);
         //check user level
 
+        // Load the js
+        $data['js_to_load'] = array(
+            'jquery.dataTables.min.js',
+            'dataTables.buttons.min.js',
+            'buttons.flash.min.js',
+            'jszip.min.js',
+            'pdfmake.min.js',
+            'vfs_fonts.js',
+            'buttons.html5.min.js',
+            'buttons.print.min.js',
+            'dataTables.bootstrap.min.js',
+            'qr/history_qr.js'
+        );
+
         //check is admin or not
-        if ($dataLevel == "is_admin") {
+        if ($dataLevel == 'is_admin') {
             $this->load->view('template/header', $data);
             $this->load->view('template/navbar', $data);
             $this->load->view('template/container');
-            $this->load->view('qr/historyqr', $data);
+            $this->load->view('qr/history_qr', $data);
+            $this->load->view('template/footer', $data);
         } else {
             redirect(site_url() . 'main/');
         }
     }
 
-    public function deletehistoryqr($id)
+    /**
+     * Function delete the QR.
+     *
+     * @return void
+     */
+    public function deleteHistoryQr($id)
     {
         $data = $this->session->userdata;
         if (empty($data['role'])) {
             redirect(site_url() . 'main/login/');
         }
         $dataLevel = $this->userlevel->checkLevel($data['role']);
-        //check user level
+        // Check user level
 
-        //check is admin or not
-        if ($dataLevel == "is_admin") {
-            $getDelete = $this->user_model->deleteHistoryQr($id);
+        // Check is admin or not
+        if ($dataLevel == 'is_admin') {
+            $getDelete = $this->QrModel->deleteHistoryQr($id);
 
-            $alldata = $this->user_model->getHistoryQrData();
-            $dataCount = count($alldata);
-            if ($getDelete == false && $dataCount > 0) {
-                $this->session->set_flashdata('flash_message', 'Error, cant delete the user!');
-            } else if ($getDelete == true && $dataCount > 0) {
-                $this->session->set_flashdata('success_message', 'Delete user was successful.');
-            } else if ($dataCount > 0) {
-                $this->session->set_flashdata('flash_message', 'Someting Error!');
+            if (!$getDelete) {
+                $this->session->set_flashdata('flash_message', 'Error, cant delete the QR!');
+            } else  {
+                $this->session->set_flashdata('success_message', 'Delete QR was successful.');
             }
-            redirect(site_url() . 'qr/historyqr/');
+            redirect(site_url() . 'qr/historyQr/');
         } else {
             redirect(site_url() . 'main/');
         }
     }
 
+    /**
+     * Get dataTables.
+     *
+     * @return void
+     */
     public function dataTableJson()
     {
-        $this->load->library('datatables');
-        $this->datatables->select('*, history_qr.id as id, history_qr.name as image');
-        $this->datatables->from('history_qr');
-        $this->datatables->add_column('action', anchor('qr/deletehistoryqr/$1', 'Delete', array('class' => 'btn btn-danger btn-sm')), 'id');
-
-        // return data
-        echo $this->datatables->generate();
-
+        echo $this->QrModel->getDataTables();
     }
 }

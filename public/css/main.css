@@ -7,7 +7,6 @@ body {
 }
 .form-signin .form-control {
   position: relative;
-  height: auto;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
@@ -85,4 +84,16 @@ tfoot input {
 .background-login{
     background: #484848;
     color: #FFF;
+}
+
+.dataTable thead td,
+.dataTable thead th,
+.dataTable tbody td,
+.dataTable tbody th {
+    white-space: pre;
+}
+
+.footer-space{
+    text-align: center;
+    margin-bottom: 50px;
 }

@@ -1,15 +1,17 @@
 <?php
-/**
- * User Level
- *
- */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class UserLevel
 {
-
+    /**
+     * User Level
+     *
+     * @param $role
+     * @return string
+     */
     public function checkLevel($role)
     {
+        $userLevel = '';
         if (!empty($role)) {
             if ($role == 1) {
                 $userLevel = 'is_admin';
@@ -19,7 +21,7 @@ class UserLevel
                 $userLevel = 'is_subscriber';
             }
         } else {
-            echo "Empty Role";
+            echo 'Empty Role';
             return false;
         }
         return $userLevel;

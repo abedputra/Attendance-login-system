@@ -1,7 +1,7 @@
 </div><!--row-->
 
 <footer>
-    <div class="col-md-12" style="text-align:center;">
+    <div class="col-md-12 footer-space">
         <hr>
         Copyright&copy; - <?php echo date('Y'); ?> | Create by <a
                 href="https://connectwithdev.com/">connectwithdev.com</a>
@@ -20,7 +20,7 @@
             </div>
             <div class="modal-body">
                 <h2>Version</h2>
-                <p>V3.0</p>
+                <p>V4.0</p>
                 <h2>About</h2>
                 <p>Attendance login system is based on the <a
                             href="https://github.com/bcit-ci/CodeIgniter">codeigniter</a>.
@@ -40,11 +40,25 @@
 
 
 <!-- /Load Js -->
-<script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url() . 'public/js/main.js' ?>"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<script>var baseUrl = "<?php echo base_url(); ?>";</script>
+
+<?php
+// Inline data
+if (isset($data_js) && is_array($data_js)){
+    foreach ($data_js as $data){
+        echo '<script>' . $data . '</script>';
+    }
+}
+
+// Load another js
+if (isset($js_to_load) && is_array($js_to_load)){
+    foreach ($js_to_load as $row){
+        echo '<script src="'. base_url() . 'public/js/' . $row . '"></script>';
+    }
+}
+?>
 </body>
 </html>

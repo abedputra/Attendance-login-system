@@ -1,0 +1,64 @@
+#map-canvas {
+    width: auto;
+    height: 500px;
+}
+
+#info {
+    color: #222;
+}
+
+.lngLat {
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.lngLat .one {
+    padding-left: 250px;
+}
+
+.lngLat .two {
+    padding-left: 34px;
+}
+
+#clipboard-btn {
+    float: left;
+    margin-right: 10px;
+    padding: 6px 8px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#info {
+    height: 140px;
+    float: left;
+    margin-bottom: 30px;
+    border: solid 2px #eee;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: inset 0 2px 5px #444;
+    -webkit-box-shadow: inset 0 2px 5px #444;
+    box-shadow: inset 0 2px 5px #444;
+}
+
+#info, .lngLat {
+    font-family: arial, sans-serif;
+    font-size: 12px;
+    padding-top: 10px;
+    width: 270px;
+}
+
+/* keep the damn titles in one line*/
+.dataTable thead td,
+.dataTable thead th,
+.dataTable tbody td,
+.dataTable tbody th {
+    white-space: pre;
+}
+
+.px200 {
+    width: 200px !important;
+    max-width: 200px !important;
+    word-wrap: break-word;
+}
