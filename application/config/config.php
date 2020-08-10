@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://192.168.43.20/system-management/'; //change link
+$config['base_url'] = 'http://192.168.43.190/system-management/'; //change link
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +36,25 @@ $config['base_url'] = 'http://192.168.43.20/system-management/'; //change link
 |
 */
 $config['index_page'] = '';
+
+/*
+|--------------------------------------------------------------------------
+| Email SMTP
+|--------------------------------------------------------------------------
+|
+| Please fill the config SMTP to sending email
+|
+*/
+$config['email_smtp'] = Array(
+    'protocol' => 'smtp',
+    'smtp_host' => '', // Your host
+    'smtp_port' => 465,
+    'smtp_user' => '', // Your email
+    'smtp_pass' => '', // Your password email
+    'smtp_crypto' => 'ssl', // ssl or tls
+    'crlf' => "\r\n",
+    'newline' => "\r\n"
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -136,7 +155,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------

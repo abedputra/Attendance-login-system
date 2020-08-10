@@ -1,0 +1,5 @@
+{
+  "require": {
+    "ozdemir/datatables": "^2.3"
+  }
+}

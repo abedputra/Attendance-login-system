@@ -17,6 +17,7 @@
                 }
                 return $zones_array;
             }
+
             ?>
             <?php echo '<input type="hidden" name="id" value="' . $id . '">'; ?>
             <div class="form-group">

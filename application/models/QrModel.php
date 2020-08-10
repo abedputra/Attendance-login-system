@@ -1,5 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
+use Ozdemir\Datatables\Datatables;
+use Ozdemir\Datatables\DB\CodeigniterAdapter;
 
 class QrModel extends CI_Model
 {
@@ -15,7 +18,7 @@ class QrModel extends CI_Model
     public function insertQr($allData)
     {
         $data = array(
-          'name' => $allData['qr'],
+            'name' => $allData['qr'],
         );
         $q = $this->db->insert_string('history_qr', $data);
         $this->db->query($q);
@@ -26,7 +29,6 @@ class QrModel extends CI_Model
         }
 
         return false;
-
     }
 
     /**
@@ -55,20 +57,55 @@ class QrModel extends CI_Model
     }
 
     /**
+     * Save data form import csv.
+     *
+     * @param $data
+     * @return void
+     */
+    public function saveFromCsv($data)
+    {
+        $q = $this->db->insert_string('history_qr', $data);
+        $this->db->query($q);
+        $this->db->insert_id();
+    }
+
+    /**
      * Get dataTables.
      *
-     * @return array
+     * @return Datatables
      */
     public function getDataTables()
     {
         // Get data from the database
-        $this->load->library('datatables');
-        $this->datatables->select('*, history_qr.id as id, history_qr.name as image');
-        $this->datatables->from('history_qr');
-        $this->datatables->add_column('action', anchor('qr/deleteHistoryQr/$1', 'Delete', array('class' => 'btn btn-danger btn-sm')), 'id');
+        $datatables = new Datatables(new CodeigniterAdapter);
+        $datatables->query('SELECT `id`, `name` FROM `history_qr`');
 
-        // Generate the data
-        return $this->datatables->generate();
+        // Add new column qr code
+        $datatables->add('qr_code', static function ($data) {
+            $dataQr = "{'name':'" . $data['name'] . "'}";
+            return '<img class="img-thumbnail clickSave" src="https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=' . $dataQr . '&choe=UTF-8&chld=L|0" style="margin: 0 auto;display: block;widht:200px !important;">';
+        });
 
+        // Add new column action
+        $datatables->add('action', static function ($data) {
+            $dataQr = "{'name':'" . $data['name'] . "'}";
+            return '<a href="https://chart.googleapis.com/chart?chs=400x400&cht=qr&chl=' . $dataQr . '&choe=UTF-8&chld=L|0" target="_blank"><button class="btn btn-primary btn-sm"><i class="fa fa-download" aria-hidden="true"></i> </button></a> <a href="' . site_url() . 'qr/deleteHistoryQr/' . $data['id'] . '"><button class="btn btn-danger btn-sm delete-button"><i class="fa fa-trash" aria-hidden="true"></i> </button> </a>';
+        });
+
+        // Generate the datatables
+        return $datatables->generate();
+
+    }
+
+    /**
+     * Function check duplicate history qr.
+     *
+     * @param $name
+     * @return boolean
+     */
+    public function isDuplicateQr($name)
+    {
+        $this->db->get_where('history_qr', array('name' => $name), 1);
+        return $this->db->affected_rows() > 0;
     }
 }

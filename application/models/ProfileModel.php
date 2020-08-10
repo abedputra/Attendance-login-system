@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class ProfileModel extends CI_Model
 {
@@ -29,9 +29,9 @@ class ProfileModel extends CI_Model
     public function updateProfile($post)
     {
         $this->db->where('id', $post['user_id']);
-        if($post['withPassword'] === 'yes'){
+        if ($post['withPassword'] === 'yes') {
             $this->db->update('users', array('password' => $post['password'], 'email' => $post['email'], 'first_name' => $post['firstname'], 'last_name' => $post['lastname']));
-        }else{
+        } else {
             $this->db->update('users', array('email' => $post['email'], 'first_name' => $post['firstname'], 'last_name' => $post['lastname']));
         }
         $this->db->trans_complete();

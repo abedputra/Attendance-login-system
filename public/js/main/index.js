@@ -5,7 +5,7 @@ $(function () {
     $.ajax({
         dataType: "json",
         url: getJsonData,
-        success: function(dataJson) {
+        success: function (dataJson) {
             cData = dataJson;
             var ctx = $("#bar-chart");
 
@@ -18,15 +18,15 @@ $(function () {
                         "fill": false,
                         "borderColor": "#f3e26d",
                         "lineTension": 0.1,
-                        "fontSize":12
+                        "fontSize": 12
                     },
                     {
-                        label: "Check-In Time",
+                        label: "Check-In User",
                         data: cData.check_in_chart,
                         "fill": true,
                         "borderColor": "rgb(75, 192, 192)",
                         "lineTension": 0.1,
-                        "fontSize":12
+                        "fontSize": 12
                     },
                 ]
             };

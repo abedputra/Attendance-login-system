@@ -26,7 +26,8 @@
                             href="https://github.com/bcit-ci/CodeIgniter">codeigniter</a>.
                 <p>If you have question, please email me : <a
                             href="mailto:abedputra@gmail.com">abedputra@gmail.com</a><br>
-                    Visit: <a href="https://connectwithdev.com/page/contact" rel="nofollow">https://connectwithdev.com/</a></p>
+                    Visit: <a href="https://connectwithdev.com/page/contact"
+                              rel="nofollow">https://connectwithdev.com/</a></p>
                 <h2>License</h2>
                 <p>The MIT License (MIT).</p>
                 <p>Copyright&copy; <?php echo date('Y'); ?>, Abed Putra.</p>
@@ -47,16 +48,16 @@
 
 <?php
 // Inline data
-if (isset($data_js) && is_array($data_js)){
-    foreach ($data_js as $data){
+if (isset($data_js) && is_array($data_js)) {
+    foreach ($data_js as $data) {
         echo '<script>' . $data . '</script>';
     }
 }
 
 // Load another js
-if (isset($js_to_load) && is_array($js_to_load)){
-    foreach ($js_to_load as $row){
-        echo '<script src="'. base_url() . 'public/js/' . $row . '"></script>';
+if (isset($js_to_load) && is_array($js_to_load)) {
+    foreach ($js_to_load as $row) {
+        echo '<script src="' . base_url() . 'public/js/' . $row . '"></script>';
     }
 }
 ?>

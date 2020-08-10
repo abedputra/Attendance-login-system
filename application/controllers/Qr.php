@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Qr extends CI_Controller
 {
@@ -39,6 +39,11 @@ class Qr extends CI_Controller
         $dataLevel = $this->userlevel->checkLevel($data['role']);
         //check user level
 
+        // Load the js
+        $data['js_to_load'] = array(
+            'qr/generate_qr.js'
+        );
+
         //check is admin or not
         if ($dataLevel == 'is_admin') {
 
@@ -68,8 +73,8 @@ class Qr extends CI_Controller
 
                     $cleanPost['email'] = $this->input->post('email');
                     $cleanPost['role'] = $this->input->post('role');
-                    $cleanPost['firstname'] = $this->input->post('firstname');
-                    $cleanPost['lastname'] = $this->input->post('lastname');
+                    $cleanPost['first_name'] = $this->input->post('firstname');
+                    $cleanPost['last_name'] = $this->input->post('lastname');
                     $cleanPost['password'] = $hashed;
                     unset($cleanPost['passconf']);
 
@@ -87,6 +92,7 @@ class Qr extends CI_Controller
                             $this->load->view('template/navbar', $data);
                             $this->load->view('template/container');
                             $this->load->view('qr/generate_qr', $data, $cleanPost);
+                            $this->load->view('template/footer', $data);
                         }
                     }
                 }
@@ -98,11 +104,19 @@ class Qr extends CI_Controller
                     $this->load->view('template/navbar', $data);
                     $this->load->view('template/container');
                     $this->load->view('qr/generate_qr', $data);
+                    $this->load->view('template/footer', $data);
                 } else {
+                    // Check if any duplicate name of QR code
+                    if ($this->QrModel->isDuplicateQr($this->input->post('qr'))) {
+                        $this->session->set_flashdata('flash_message', 'Name of user already exists. Please try another one.');
+                        redirect(site_url() . 'qr/generateQr');
+                    }
+
                     if ($this->input->post('qr') == '') {
                         $this->session->set_flashdata('flash_message', 'Please fill the name of user.');
                         redirect(site_url() . 'qr/generateQr');
                     }
+
                     $post = $this->input->post(NULL, TRUE);
                     $cleanPost = $this->security->xss_clean($post);
                     $cleanPost['qr'] = $this->input->post('qr');
@@ -115,6 +129,7 @@ class Qr extends CI_Controller
                         $this->load->view('template/navbar', $data);
                         $this->load->view('template/container');
                         $this->load->view('qr/generate_qr', $data, $cleanPost);
+                        $this->load->view('template/footer', $data);
                     }
                 }
             }
@@ -184,7 +199,7 @@ class Qr extends CI_Controller
 
             if (!$getDelete) {
                 $this->session->set_flashdata('flash_message', 'Error, cant delete the QR!');
-            } else  {
+            } else {
                 $this->session->set_flashdata('success_message', 'Delete QR was successful.');
             }
             redirect(site_url() . 'qr/historyQr/');
@@ -201,5 +216,108 @@ class Qr extends CI_Controller
     public function dataTableJson()
     {
         echo $this->QrModel->getDataTables();
+    }
+
+    /**
+     * Function hash password.
+     *
+     * @param $pass
+     * @return hash password
+     */
+    public function hashPassword($pass){
+        $this->load->library('password');
+        return $this->password->create_hash($pass);
+    }
+
+    /**
+     * Upload data from csv file.
+     *
+     * @return void
+     */
+    public function importData()
+    {
+        $errorMessage = '';
+        $errorMessageQr = '';
+        $errorArr = array();
+        $errorArrQr = array();
+
+        // File extension
+        $extension = pathinfo($_FILES['import']['name'], PATHINFO_EXTENSION);
+
+        // If file extension is 'csv'
+        if(!empty($_FILES['import']['name']) && $extension == 'csv'){
+
+            $fp = fopen($_FILES['import']['tmp_name'],'r');
+
+            // Skipping header row
+            fgetcsv($fp);
+
+            while(($csvData = fgetcsv($fp)) !== FALSE){
+                $csvData = array_map('utf8_encode', $csvData);
+
+                // Row column length
+                $dataLen = count($csvData);
+
+                // Skip row if length != 6
+                if( !($dataLen == 6) ) {
+                    continue;
+                }
+
+                // Assign value to variables
+                $email = trim($csvData[0]);
+                $first_name = trim($csvData[1]);
+                $last_name = trim($csvData[2]);
+                $canLogin = trim($csvData[5]);
+                $name = $first_name . ' ' . $last_name;
+
+                // Insert data to users table
+                if($canLogin == 'yes'){
+
+                    // Check if any duplicate email
+                    if ($this->MainModel->isDuplicate($email)) {
+                        $errorArr[] = $email;
+                        $str = implode (", ", $errorArr);
+                        $errorMessage = '<span style="color:#b80e0e;">But, some data email already exists ( ' . $str . ' )</span>';
+                        continue;
+                    }
+
+                    $role = trim($csvData[3]);
+                    $password = trim($csvData[4]);
+
+                    $hashed = $this->hashPassword($password);
+
+                    $data = array(
+                        'email' => $email,
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                        'role' => $role,
+                        'password' => $hashed,
+                    );
+
+                    $this->MainModel->addUser($data);
+                }
+
+                // Check if any duplicate name of QR code
+                if ($this->QrModel->isDuplicateQr($name)) {
+                    $errorArrQr[] = $name;
+                    $strQr = implode (", ", $errorArrQr);
+                    $errorMessageQr = '<span style="color:#b80e0e;"> Also, some data name already exists ( ' . $strQr . ' )</span>';
+                    continue;
+                }
+
+                // Insert data to QR code
+                $data = array(
+                    'name' => $name,
+                );
+
+                $this->QrModel->saveFromCsv($data);
+            }
+
+            $this->session->set_flashdata('success_message', 'Imported was success! ' . $errorMessage . ' ' . $errorMessageQr);
+            redirect(site_url() . 'qr/generateQr');
+        }
+
+        $this->session->set_flashdata('flash_message', 'Please select CSV file.');
+        redirect(site_url() . 'qr/generateQr');
     }
 }

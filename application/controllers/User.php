@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class User extends CI_Controller
 {
@@ -144,8 +144,6 @@ class User extends CI_Controller
                 $issetPass = $this->input->post('password');
                 $post = $this->input->post(NULL, TRUE);
                 $cleanPost = $this->security->xss_clean($post);
-
-
                 $cleanPost['id'] = $data['id'];
                 $cleanPost['email'] = $this->input->post('email');
                 $cleanPost['role'] = $this->input->post('role');
@@ -158,7 +156,7 @@ class User extends CI_Controller
                     $cleanPost['password'] = $hashed;
                     unset($cleanPost['passconf']);
                     $cleanPost['withPassword'] = 'yes';
-                }else{
+                } else {
                     $cleanPost['withPassword'] = 'no';
                 }
 
@@ -221,8 +219,8 @@ class User extends CI_Controller
 
                     $cleanPost['email'] = $this->input->post('email');
                     $cleanPost['role'] = $this->input->post('role');
-                    $cleanPost['firstname'] = $this->input->post('firstname');
-                    $cleanPost['lastname'] = $this->input->post('lastname');
+                    $cleanPost['first_name'] = $this->input->post('firstname');
+                    $cleanPost['last_name'] = $this->input->post('lastname');
                     $cleanPost['password'] = $hashed;
                     unset($cleanPost['passconf']);
 

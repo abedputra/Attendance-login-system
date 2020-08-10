@@ -1,99 +1,108 @@
 body {
-  padding-bottom: 40px;
+    padding-bottom: 40px;
 }
 
 .form-signin {
-  margin: 0 auto;
+    margin: 0 auto;
 }
+
 .form-signin .form-control {
-  position: relative;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 10px;
-  font-size: 16px;
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
 }
+
 .form-signin .form-control:focus {
-  z-index: 2;
+    z-index: 2;
 }
 
 .form-group {
-    margin-bottom:6px;
+    margin-bottom: 6px;
 }
+
 .form-group .error {
-    font-style:italic;
-    color:red;
-    font-size:11px;
-    padding-top:8px;
-    text-align:left;    
+    font-style: italic;
+    color: red;
+    font-size: 11px;
+    padding-top: 8px;
+    text-align: left;
 }
+
 .form-signin .btn {
-    margin-top:20px;
+    margin-top: 20px;
 }
+
 .form-control[readonly] {
     cursor: default;
     background-color: #FFF;
 }
+
 h5 {
     line-height: 20px;
-    margin-top:12px;
+    margin-top: 12px;
 }
+
 h5 span {
-    color:#006dcc;
+    color: #006dcc;
 }
-.flash-message{
+
+.flash-message {
     border: 1px solid #E9E2C0;
     border-radius: 4px;
-    margin-bottom:25px;
+    margin-bottom: 25px;
 }
+
 .col-lg-offset-4 p {
-    margin-bottom:3px;
+    margin-bottom: 3px;
 }
-.center-word{
-    text-align:center;
+
+.center-word {
+    text-align: center;
 }
+
 a {
     text-decoration: none !important;
 }
-footer{
+
+footer {
     padding-top: 40px;
 }
-.col-lg-4 a .fa{
+
+.col-lg-4 a .fa {
     font-size: 50px;
     margin-right: 15px;
 }
-.ellipsis{
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+.ellipsis {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
 tfoot input {
     width: 100%;
     padding: 3px;
     box-sizing: border-box;
 }
-.center-vertical{
-    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+
+.center-vertical {
+    min-height: 100%; /* Fallback for browsers do NOT support vh unit */
     min-height: 100vh; /* These two lines are counted as one :-)       */
 
     display: flex;
     align-items: center;
 }
 
-.background-login{
+.background-login {
     background: #484848;
     color: #FFF;
 }
 
-.dataTable thead td,
-.dataTable thead th,
-.dataTable tbody td,
-.dataTable tbody th {
-    white-space: pre;
-}
-
-.footer-space{
+.footer-space {
     text-align: center;
     margin-bottom: 50px;
 }

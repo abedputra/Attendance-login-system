@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class MainModel extends CI_Model
 {
@@ -295,8 +295,8 @@ class MainModel extends CI_Model
     public function addUser($post)
     {
         $string = array(
-            'first_name' => $post['firstname'],
-            'last_name' => $post['lastname'],
+            'first_name' => $post['first_name'],
+            'last_name' => $post['last_name'],
             'email' => $post['email'],
             'password' => $post['password'],
             'role' => $post['role'],

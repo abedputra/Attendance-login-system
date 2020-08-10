@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * CodeIgniter Curl Class
@@ -34,7 +34,7 @@ class Curl
             log_message('error', 'cURL Class - PHP was not built with cURL enabled. Rebuild PHP with --with-curl to use cURL.');
         }
 
-        $url AND $this->create($url);
+        $url and $this->create($url);
     }
 
     public function is_enabled()

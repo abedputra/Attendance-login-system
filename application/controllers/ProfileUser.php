@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class ProfileUser extends CI_Controller
 {
@@ -95,7 +95,7 @@ class ProfileUser extends CI_Controller
                 $cleanPost['password'] = $hashed;
                 unset($cleanPost['passconf']);
                 $cleanPost['withPassword'] = 'yes';
-            }else{
+            } else {
                 $cleanPost['withPassword'] = 'no';
             }
 

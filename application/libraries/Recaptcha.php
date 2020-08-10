@@ -6,7 +6,7 @@
  * https://github.com/google/ReCAPTCHA
  *
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class ReCaptcha
 {

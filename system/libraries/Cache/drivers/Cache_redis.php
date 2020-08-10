@@ -26,305 +26,283 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
- * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
- * @license	https://opensource.org/licenses/MIT	MIT License
- * @link	https://codeigniter.com
- * @since	Version 3.0.0
+ * @package    CodeIgniter
+ * @author    EllisLab Dev Team
+ * @copyright    Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright    Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @license    https://opensource.org/licenses/MIT	MIT License
+ * @link    https://codeigniter.com
+ * @since    Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * CodeIgniter Redis Caching Class
  *
- * @package	   CodeIgniter
+ * @package       CodeIgniter
  * @subpackage Libraries
  * @category   Core
- * @author	   Anton Lindqvist <anton@qvister.se>
+ * @author       Anton Lindqvist <anton@qvister.se>
  * @link
  */
 class CI_Cache_redis extends CI_Driver
 {
-	/**
-	 * Default config
-	 *
-	 * @static
-	 * @var	array
-	 */
-	protected static $_default_config = array(
-		'socket_type' => 'tcp',
-		'host' => '127.0.0.1',
-		'password' => NULL,
-		'port' => 6379,
-		'timeout' => 0
-	);
+    /**
+     * Default config
+     *
+     * @static
+     * @var    array
+     */
+    protected static $_default_config = array(
+        'socket_type' => 'tcp',
+        'host' => '127.0.0.1',
+        'password' => NULL,
+        'port' => 6379,
+        'timeout' => 0
+    );
+    /**
+     * del()/delete() method name depending on phpRedis version
+     *
+     * @var    string
+     */
+    protected static $_delete_name;
+    /**
+     * Redis connection
+     *
+     * @var    Redis
+     */
+    protected $_redis;
+    /**
+     * An internal cache for storing keys of serialized values.
+     *
+     * @var    array
+     */
+    protected $_serialized = array();
 
-	/**
-	 * Redis connection
-	 *
-	 * @var	Redis
-	 */
-	protected $_redis;
+    // ------------------------------------------------------------------------
 
-	/**
-	 * An internal cache for storing keys of serialized values.
-	 *
-	 * @var	array
-	 */
-	protected $_serialized = array();
+    /**
+     * Class constructor
+     *
+     * Setup Redis
+     *
+     * Loads Redis config file if present. Will halt execution
+     * if a Redis connection can't be established.
+     *
+     * @return    void
+     * @see        Redis::connect()
+     */
+    public function __construct()
+    {
+        if (!$this->is_supported()) {
+            log_message('error', 'Cache: Failed to create Redis object; extension not loaded?');
+            return;
+        }
 
-	/**
-	 * del()/delete() method name depending on phpRedis version
-	 *
-	 * @var	string
-	 */
-	protected static $_delete_name;
+        isset(static::$_delete_name) or static::$_delete_name = version_compare(phpversion('phpredis'), '5', '>=')
+            ? 'del'
+            : 'delete';
 
-	// ------------------------------------------------------------------------
+        $CI =& get_instance();
 
-	/**
-	 * Class constructor
-	 *
-	 * Setup Redis
-	 *
-	 * Loads Redis config file if present. Will halt execution
-	 * if a Redis connection can't be established.
-	 *
-	 * @return	void
-	 * @see		Redis::connect()
-	 */
-	public function __construct()
-	{
-		if ( ! $this->is_supported())
-		{
-			log_message('error', 'Cache: Failed to create Redis object; extension not loaded?');
-			return;
-		}
+        if ($CI->config->load('redis', TRUE, TRUE)) {
+            $config = array_merge(self::$_default_config, $CI->config->item('redis'));
+        } else {
+            $config = self::$_default_config;
+        }
 
-		isset(static::$_delete_name) OR static::$_delete_name = version_compare(phpversion('phpredis'), '5', '>=')
-			? 'del'
-			: 'delete';
+        $this->_redis = new Redis();
 
-		$CI =& get_instance();
+        try {
+            if ($config['socket_type'] === 'unix') {
+                $success = $this->_redis->connect($config['socket']);
+            } else // tcp socket
+            {
+                $success = $this->_redis->connect($config['host'], $config['port'], $config['timeout']);
+            }
 
-		if ($CI->config->load('redis', TRUE, TRUE))
-		{
-			$config = array_merge(self::$_default_config, $CI->config->item('redis'));
-		}
-		else
-		{
-			$config = self::$_default_config;
-		}
+            if (!$success) {
+                log_message('error', 'Cache: Redis connection failed. Check your configuration.');
+            }
 
-		$this->_redis = new Redis();
+            if (isset($config['password']) && !$this->_redis->auth($config['password'])) {
+                log_message('error', 'Cache: Redis authentication failed.');
+            }
+        } catch (RedisException $e) {
+            log_message('error', 'Cache: Redis connection refused (' . $e->getMessage() . ')');
+        }
+    }
 
-		try
-		{
-			if ($config['socket_type'] === 'unix')
-			{
-				$success = $this->_redis->connect($config['socket']);
-			}
-			else // tcp socket
-			{
-				$success = $this->_redis->connect($config['host'], $config['port'], $config['timeout']);
-			}
+    // ------------------------------------------------------------------------
 
-			if ( ! $success)
-			{
-				log_message('error', 'Cache: Redis connection failed. Check your configuration.');
-			}
+    /**
+     * Check if Redis driver is supported
+     *
+     * @return    bool
+     */
+    public function is_supported()
+    {
+        return extension_loaded('redis');
+    }
 
-			if (isset($config['password']) && ! $this->_redis->auth($config['password']))
-			{
-				log_message('error', 'Cache: Redis authentication failed.');
-			}
-		}
-		catch (RedisException $e)
-		{
-			log_message('error', 'Cache: Redis connection refused ('.$e->getMessage().')');
-		}
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Save cache
+     *
+     * @param string $id Cache ID
+     * @param mixed $data Data to save
+     * @param int $ttl Time to live in seconds
+     * @param bool $raw Whether to store the raw value (unused)
+     * @return    bool    TRUE on success, FALSE on failure
+     */
+    public function save($id, $data, $ttl = 60, $raw = FALSE)
+    {
+        if (is_array($data) or is_object($data)) {
+            if (!$this->_redis->sIsMember('_ci_redis_serialized', $id) && !$this->_redis->sAdd('_ci_redis_serialized', $id)) {
+                return FALSE;
+            }
 
-	/**
-	 * Get cache
-	 *
-	 * @param	string	$key	Cache ID
-	 * @return	mixed
-	 */
-	public function get($key)
-	{
-		$value = $this->_redis->get($key);
+            isset($this->_serialized[$id]) or $this->_serialized[$id] = TRUE;
+            $data = serialize($data);
+        } else {
+            $this->_redis->sRemove('_ci_redis_serialized', $id);
+        }
 
-		if ($value !== FALSE && $this->_redis->sIsMember('_ci_redis_serialized', $key))
-		{
-			return unserialize($value);
-		}
+        return $this->_redis->set($id, $data, $ttl);
+    }
 
-		return $value;
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Delete from cache
+     *
+     * @param string $key Cache key
+     * @return    bool
+     */
+    public function delete($key)
+    {
+        if ($this->_redis->{static::$_delete_name}($key) !== 1) {
+            return FALSE;
+        }
 
-	/**
-	 * Save cache
-	 *
-	 * @param	string	$id	Cache ID
-	 * @param	mixed	$data	Data to save
-	 * @param	int	$ttl	Time to live in seconds
-	 * @param	bool	$raw	Whether to store the raw value (unused)
-	 * @return	bool	TRUE on success, FALSE on failure
-	 */
-	public function save($id, $data, $ttl = 60, $raw = FALSE)
-	{
-		if (is_array($data) OR is_object($data))
-		{
-			if ( ! $this->_redis->sIsMember('_ci_redis_serialized', $id) && ! $this->_redis->sAdd('_ci_redis_serialized', $id))
-			{
-				return FALSE;
-			}
+        $this->_redis->sRemove('_ci_redis_serialized', $key);
 
-			isset($this->_serialized[$id]) OR $this->_serialized[$id] = TRUE;
-			$data = serialize($data);
-		}
-		else
-		{
-			$this->_redis->sRemove('_ci_redis_serialized', $id);
-		}
+        return TRUE;
+    }
 
-		return $this->_redis->set($id, $data, $ttl);
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Increment a raw value
+     *
+     * @param string $id Cache ID
+     * @param int $offset Step/value to add
+     * @return    mixed    New value on success or FALSE on failure
+     */
+    public function increment($id, $offset = 1)
+    {
+        return $this->_redis->incrBy($id, $offset);
+    }
 
-	/**
-	 * Delete from cache
-	 *
-	 * @param	string	$key	Cache key
-	 * @return	bool
-	 */
-	public function delete($key)
-	{
-		if ($this->_redis->{static::$_delete_name}($key) !== 1)
-		{
-			return FALSE;
-		}
+    // ------------------------------------------------------------------------
 
-		$this->_redis->sRemove('_ci_redis_serialized', $key);
+    /**
+     * Decrement a raw value
+     *
+     * @param string $id Cache ID
+     * @param int $offset Step/value to reduce by
+     * @return    mixed    New value on success or FALSE on failure
+     */
+    public function decrement($id, $offset = 1)
+    {
+        return $this->_redis->decrBy($id, $offset);
+    }
 
-		return TRUE;
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Clean cache
+     *
+     * @return    bool
+     * @see        Redis::flushDB()
+     */
+    public function clean()
+    {
+        return $this->_redis->flushDB();
+    }
 
-	/**
-	 * Increment a raw value
-	 *
-	 * @param	string	$id	Cache ID
-	 * @param	int	$offset	Step/value to add
-	 * @return	mixed	New value on success or FALSE on failure
-	 */
-	public function increment($id, $offset = 1)
-	{
-		return $this->_redis->incrBy($id, $offset);
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Get cache driver info
+     *
+     * @param string $type Not supported in Redis.
+     *                Only included in order to offer a
+     *                consistent cache API.
+     * @return    array
+     * @see        Redis::info()
+     */
+    public function cache_info($type = NULL)
+    {
+        return $this->_redis->info();
+    }
 
-	/**
-	 * Decrement a raw value
-	 *
-	 * @param	string	$id	Cache ID
-	 * @param	int	$offset	Step/value to reduce by
-	 * @return	mixed	New value on success or FALSE on failure
-	 */
-	public function decrement($id, $offset = 1)
-	{
-		return $this->_redis->decrBy($id, $offset);
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Get cache metadata
+     *
+     * @param string $key Cache key
+     * @return    array
+     */
+    public function get_metadata($key)
+    {
+        $value = $this->get($key);
 
-	/**
-	 * Clean cache
-	 *
-	 * @return	bool
-	 * @see		Redis::flushDB()
-	 */
-	public function clean()
-	{
-		return $this->_redis->flushDB();
-	}
+        if ($value !== FALSE) {
+            return array(
+                'expire' => time() + $this->_redis->ttl($key),
+                'data' => $value
+            );
+        }
 
-	// ------------------------------------------------------------------------
+        return FALSE;
+    }
 
-	/**
-	 * Get cache driver info
-	 *
-	 * @param	string	$type	Not supported in Redis.
-	 *				Only included in order to offer a
-	 *				consistent cache API.
-	 * @return	array
-	 * @see		Redis::info()
-	 */
-	public function cache_info($type = NULL)
-	{
-		return $this->_redis->info();
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Get cache
+     *
+     * @param string $key Cache ID
+     * @return    mixed
+     */
+    public function get($key)
+    {
+        $value = $this->_redis->get($key);
 
-	/**
-	 * Get cache metadata
-	 *
-	 * @param	string	$key	Cache key
-	 * @return	array
-	 */
-	public function get_metadata($key)
-	{
-		$value = $this->get($key);
+        if ($value !== FALSE && $this->_redis->sIsMember('_ci_redis_serialized', $key)) {
+            return unserialize($value);
+        }
 
-		if ($value !== FALSE)
-		{
-			return array(
-				'expire' => time() + $this->_redis->ttl($key),
-				'data' => $value
-			);
-		}
+        return $value;
+    }
 
-		return FALSE;
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
-
-	/**
-	 * Check if Redis driver is supported
-	 *
-	 * @return	bool
-	 */
-	public function is_supported()
-	{
-		return extension_loaded('redis');
-	}
-
-	// ------------------------------------------------------------------------
-
-	/**
-	 * Class destructor
-	 *
-	 * Closes the connection to Redis if present.
-	 *
-	 * @return	void
-	 */
-	public function __destruct()
-	{
-		if ($this->_redis)
-		{
-			$this->_redis->close();
-		}
-	}
+    /**
+     * Class destructor
+     *
+     * Closes the connection to Redis if present.
+     *
+     * @return    void
+     */
+    public function __destruct()
+    {
+        if ($this->_redis) {
+            $this->_redis->close();
+        }
+    }
 }

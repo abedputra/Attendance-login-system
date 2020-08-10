@@ -1,0 +1,59 @@
+{
+  "_readme": [
+    "This file locks the dependencies of your project to a known state",
+    "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+    "This file is @generated automatically"
+  ],
+  "content-hash": "fbf6fe038df76a969e4aed969e00763a",
+  "packages": [
+    {
+      "name": "ozdemir/datatables",
+      "version": "2.3.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/n1crack/datatables.git",
+        "reference": "1427c04881d66222de99db812f9c6665483d8116"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/n1crack/datatables/zipball/1427c04881d66222de99db812f9c6665483d8116",
+        "reference": "1427c04881d66222de99db812f9c6665483d8116",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=7.1.3"
+      },
+      "require-dev": {
+        "phpspec/phpspec": "^4.0",
+        "phpunit/phpunit": "^7.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Ozdemir\\Datatables\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Yusuf Özdemir",
+          "email": "yusuf@ozdemir.be"
+        }
+      ],
+      "description": "PHP Library to handle server-side processing for Datatables, in a fast and simple way.",
+      "time": "2019-12-03T19:11:56+00:00"
+    }
+  ],
+  "packages-dev": [],
+  "aliases": [],
+  "minimum-stability": "stable",
+  "stability-flags": [],
+  "prefer-stable": false,
+  "prefer-lowest": false,
+  "platform": [],
+  "platform-dev": [],
+  "plugin-api-version": "1.1.0"
+}

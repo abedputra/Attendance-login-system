@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Main extends CI_Controller
 {
@@ -249,9 +249,9 @@ class Main extends CI_Controller
 
                         $to_email = $this->input->post('email'); //send to
 
-                        // Load email library
-                        $this->load->library('email');
-
+                        // Load email library and config
+                        $this->load->library('email', $this->config->item('email_smtp'));
+                        $this->email->set_newline("\r\n");
                         $this->email->from($this->config->item('register'), 'Set Password ' . $this->input->post('firstname') . ' ' . $this->input->post('lastname')); //from sender, title email
                         $this->email->to($to_email);
                         $this->email->subject('Set Password Login');
@@ -302,9 +302,9 @@ class Main extends CI_Controller
 
                     $to_email = $this->input->post('email'); //send to
 
-                    // Load email library
-                    $this->load->library('email');
-                    
+                    // Load email library and config
+                    $this->load->library('email', $this->config->item('email_smtp'));
+                    $this->email->set_newline("\r\n");
                     $this->email->from($this->config->item('register'), 'Set Password ' . $this->input->post('firstname') . ' ' . $this->input->post('lastname')); //from sender, title email
                     $this->email->to($to_email);
                     $this->email->subject('Set Password Login');
@@ -481,9 +481,9 @@ class Main extends CI_Controller
 
                     $to_email = $this->input->post('email'); //send to
 
-                    //Load email library
-                    $this->load->library('email');
-
+                    // Load email library and config
+                    $this->load->library('email', $this->config->item('email_smtp'));
+                    $this->email->set_newline("\r\n");
                     $this->email->from($this->config->item('forgot'), 'Reset Password! ' . $this->input->post('firstname') . ' ' . $this->input->post('lastname')); //from sender, title email
                     $this->email->to($to_email);
                     $this->email->subject('Reset Password');
@@ -529,9 +529,9 @@ class Main extends CI_Controller
 
                 $to_email = $this->input->post('email'); //send to
 
-                //Load email library
-                $this->load->library('email');
-
+                // Load email library and config
+                $this->load->library('email', $this->config->item('email_smtp'));
+                $this->email->set_newline("\r\n");
                 $this->email->from($this->config->item('forgot'), 'Reset Password! ' . $this->input->post('firstname') . ' ' . $this->input->post('lastname')); //from sender, title email
                 $this->email->to($to_email);
                 $this->email->subject('Reset Password');
@@ -543,11 +543,10 @@ class Main extends CI_Controller
                     redirect(site_url() . 'main/successResetPassword/');
                 } else {
                     $this->session->set_flashdata('flash_message', 'There was a problem sending an email.');
-                    exit;
+                    redirect(site_url() . 'main/forgot');
                 }
             }
         }
-
     }
 
     /**
@@ -577,10 +576,10 @@ class Main extends CI_Controller
         $this->form_validation->set_rules('passconf', 'Password Confirmation', 'required|matches[password]');
 
         if ($this->form_validation->run() == FALSE) {
-            $this->load->view('template/header', $data);
-            $this->load->view('template/container');
-            $this->load->view('main/resetPassword', $data);
-            $this->load->view('template/footer');
+            $this->load->view('template_frontend/header', $data);
+            $this->load->view('template_frontend/container');
+            $this->load->view('main/reset_password', $data);
+            $this->load->view('template_frontend/footer');
         } else {
             $this->load->library('password');
             $post = $this->input->post(NULL, TRUE);
@@ -692,8 +691,7 @@ class Main extends CI_Controller
                         $get_over_time = $this->getTime($change_out_time - strtotime($data['out']));
                         if ($get_in_database > strtotime($data['out']) || $change_out_time < strtotime($data['out'])) {
                             $over_time = '00:00:00';
-                        }
-                        else {
+                        } else {
                             $over_time = "$get_over_time[0]:$get_over_time[1]:$get_over_time[2]";
                         }
 
@@ -701,8 +699,7 @@ class Main extends CI_Controller
                         $get_early_out_time = $this->getTime(strtotime($data['out']) - $change_out_time);
                         if ($get_in_database > strtotime($data['out'])) {
                             $early_out_time = '00:00:00';
-                        }
-                        else {
+                        } else {
                             $early_out_time = "$get_early_out_time[0]:$get_early_out_time[1]:$get_early_out_time[2]";
                         }
 

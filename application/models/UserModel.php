@@ -1,5 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+
+use Ozdemir\Datatables\Datatables;
+use Ozdemir\Datatables\DB\CodeigniterAdapter;
 
 class UserModel extends CI_Model
 {
@@ -44,10 +47,10 @@ class UserModel extends CI_Model
     {
 
         $this->db->where('id', $post['id']);
-        if($post['withPassword'] === 'yes'){
-            $this->db->update('users', array('password' => $post['password'], 'email' => $post['email'], 'first_name' => $post['firstname'], 'last_name' => $post['lastname']));
-        }else{
-            $this->db->update('users', array('email' => $post['email'], 'first_name' => $post['firstname'], 'last_name' => $post['lastname']));
+        if ($post['withPassword'] === 'yes') {
+            $this->db->update('users', array('password' => $post['password'], 'email' => $post['email'], 'first_name' => $post['firstname'], 'last_name' => $post['lastname'], 'role' => $post['role']));
+        } else {
+            $this->db->update('users', array('email' => $post['email'], 'first_name' => $post['firstname'], 'last_name' => $post['lastname'], 'role' => $post['role']));
         }
         $this->db->trans_complete();
 
@@ -84,19 +87,32 @@ class UserModel extends CI_Model
     /**
      * Get dataTables.
      *
-     * @return array
+     * @return Datatables
      */
     public function getDataTables()
     {
-        $this->load->library('datatables');
-        $this->datatables->select('*, users.id as id');
-        $this->datatables->from('users');
-        $this->datatables->add_column('change_role', anchor('user/edit/$1', 'Edit', array('class' => 'btn btn-primary btn-sm')), 'id');
-        $this->datatables->add_column('ban_user', anchor('user/banUser/$1', 'Ban User', array('class' => 'btn btn-success btn-sm')), 'id');
-        $this->datatables->add_column('delete', anchor('user/delete/$1', 'Delete', array('class' => 'btn btn-danger btn-sm')), 'id');
+        // Get data from the database
+        $datatables = new Datatables(new CodeigniterAdapter);
+        $datatables->query('SELECT `id`, `first_name`, `last_name`, `email`, `last_login`, `role`, `status`, `banned_users` FROM `users`');
 
-        // Generate the data
-        return $this->datatables->generate();
+        // Edit the column
+        $datatables->edit('role', function ($data) {
+            if ($data['role'] == 1) {
+                $dataRole = "Admin";
+            }else if ($data['role'] == 2) {
+                $dataRole = "User";
+            }else {
+                $dataRole = "Subscribe";
+            }
+            return $dataRole;
+        });
 
+        // Add new column
+        $datatables->add('action', static function ($data) {
+            return '<a href="' . site_url() . 'user/edit/' . $data['id'] . '"><button class="btn btn-primary btn-sm"><i class="fa fa-edit" aria-hidden="true"></i> </button></a> <a href="' . site_url() . 'user/banUser/' . $data['id'] . '"><button class="btn btn-warning btn-sm"><i class="fa fa-ban" aria-hidden="true"></i> </button> </a> <a href="' . site_url() . 'user/delete/' . $data['id'] . '"><button class="btn btn-danger btn-sm delete-button"><i class="fa fa-trash" aria-hidden="true"></i> </button> </a>';
+        });
+
+        // Generate the datatables
+        return $datatables->generate();
     }
 }

@@ -26,261 +26,250 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
- * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
- * @license	https://opensource.org/licenses/MIT	MIT License
- * @link	https://codeigniter.com
- * @since	Version 2.0
+ * @package    CodeIgniter
+ * @author    EllisLab Dev Team
+ * @copyright    Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright    Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @license    https://opensource.org/licenses/MIT	MIT License
+ * @link    https://codeigniter.com
+ * @since    Version 2.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * CodeIgniter File Caching Class
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
- * @category	Core
- * @author		EllisLab Dev Team
+ * @package        CodeIgniter
+ * @subpackage    Libraries
+ * @category    Core
+ * @author        EllisLab Dev Team
  * @link
  */
-class CI_Cache_file extends CI_Driver {
+class CI_Cache_file extends CI_Driver
+{
 
-	/**
-	 * Directory in which to save cache files
-	 *
-	 * @var string
-	 */
-	protected $_cache_path;
+    /**
+     * Directory in which to save cache files
+     *
+     * @var string
+     */
+    protected $_cache_path;
 
-	/**
-	 * Initialize file-based cache
-	 *
-	 * @return	void
-	 */
-	public function __construct()
-	{
-		$CI =& get_instance();
-		$CI->load->helper('file');
-		$path = $CI->config->item('cache_path');
-		$this->_cache_path = ($path === '') ? APPPATH.'cache/' : $path;
-	}
+    /**
+     * Initialize file-based cache
+     *
+     * @return    void
+     */
+    public function __construct()
+    {
+        $CI =& get_instance();
+        $CI->load->helper('file');
+        $path = $CI->config->item('cache_path');
+        $this->_cache_path = ($path === '') ? APPPATH . 'cache/' : $path;
+    }
 
-	// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
-	/**
-	 * Fetch from cache
-	 *
-	 * @param	string	$id	Cache ID
-	 * @return	mixed	Data on success, FALSE on failure
-	 */
-	public function get($id)
-	{
-		$data = $this->_get($id);
-		return is_array($data) ? $data['data'] : FALSE;
-	}
+    /**
+     * Fetch from cache
+     *
+     * @param string $id Cache ID
+     * @return    mixed    Data on success, FALSE on failure
+     */
+    public function get($id)
+    {
+        $data = $this->_get($id);
+        return is_array($data) ? $data['data'] : FALSE;
+    }
 
-	// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
-	/**
-	 * Save into cache
-	 *
-	 * @param	string	$id	Cache ID
-	 * @param	mixed	$data	Data to store
-	 * @param	int	$ttl	Time to live in seconds
-	 * @param	bool	$raw	Whether to store the raw value (unused)
-	 * @return	bool	TRUE on success, FALSE on failure
-	 */
-	public function save($id, $data, $ttl = 60, $raw = FALSE)
-	{
-		$contents = array(
-			'time'		=> time(),
-			'ttl'		=> $ttl,
-			'data'		=> $data
-		);
+    /**
+     * Get all data
+     *
+     * Internal method to get all the relevant data about a cache item
+     *
+     * @param string $id Cache ID
+     * @return    mixed    Data array on success or FALSE on failure
+     */
+    protected function _get($id)
+    {
+        if (!is_file($this->_cache_path . $id)) {
+            return FALSE;
+        }
 
-		if (write_file($this->_cache_path.$id, serialize($contents)))
-		{
-			chmod($this->_cache_path.$id, 0640);
-			return TRUE;
-		}
+        $data = unserialize(file_get_contents($this->_cache_path . $id));
 
-		return FALSE;
-	}
+        if ($data['ttl'] > 0 && time() > $data['time'] + $data['ttl']) {
+            file_exists($this->_cache_path . $id) && unlink($this->_cache_path . $id);
+            return FALSE;
+        }
 
-	// ------------------------------------------------------------------------
+        return $data;
+    }
 
-	/**
-	 * Delete from Cache
-	 *
-	 * @param	mixed	unique identifier of item in cache
-	 * @return	bool	true on success/false on failure
-	 */
-	public function delete($id)
-	{
-		return is_file($this->_cache_path.$id) ? unlink($this->_cache_path.$id) : FALSE;
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Delete from Cache
+     *
+     * @param mixed    unique identifier of item in cache
+     * @return    bool    true on success/false on failure
+     */
+    public function delete($id)
+    {
+        return is_file($this->_cache_path . $id) ? unlink($this->_cache_path . $id) : FALSE;
+    }
 
-	/**
-	 * Increment a raw value
-	 *
-	 * @param	string	$id	Cache ID
-	 * @param	int	$offset	Step/value to add
-	 * @return	New value on success, FALSE on failure
-	 */
-	public function increment($id, $offset = 1)
-	{
-		$data = $this->_get($id);
+    // ------------------------------------------------------------------------
 
-		if ($data === FALSE)
-		{
-			$data = array('data' => 0, 'ttl' => 60);
-		}
-		elseif ( ! is_int($data['data']))
-		{
-			return FALSE;
-		}
+    /**
+     * Increment a raw value
+     *
+     * @param string $id Cache ID
+     * @param int $offset Step/value to add
+     * @return    New value on success, FALSE on failure
+     */
+    public function increment($id, $offset = 1)
+    {
+        $data = $this->_get($id);
 
-		$new_value = $data['data'] + $offset;
-		return $this->save($id, $new_value, $data['ttl'])
-			? $new_value
-			: FALSE;
-	}
+        if ($data === FALSE) {
+            $data = array('data' => 0, 'ttl' => 60);
+        } elseif (!is_int($data['data'])) {
+            return FALSE;
+        }
 
-	// ------------------------------------------------------------------------
+        $new_value = $data['data'] + $offset;
+        return $this->save($id, $new_value, $data['ttl'])
+            ? $new_value
+            : FALSE;
+    }
 
-	/**
-	 * Decrement a raw value
-	 *
-	 * @param	string	$id	Cache ID
-	 * @param	int	$offset	Step/value to reduce by
-	 * @return	New value on success, FALSE on failure
-	 */
-	public function decrement($id, $offset = 1)
-	{
-		$data = $this->_get($id);
+    // ------------------------------------------------------------------------
 
-		if ($data === FALSE)
-		{
-			$data = array('data' => 0, 'ttl' => 60);
-		}
-		elseif ( ! is_int($data['data']))
-		{
-			return FALSE;
-		}
+    /**
+     * Save into cache
+     *
+     * @param string $id Cache ID
+     * @param mixed $data Data to store
+     * @param int $ttl Time to live in seconds
+     * @param bool $raw Whether to store the raw value (unused)
+     * @return    bool    TRUE on success, FALSE on failure
+     */
+    public function save($id, $data, $ttl = 60, $raw = FALSE)
+    {
+        $contents = array(
+            'time' => time(),
+            'ttl' => $ttl,
+            'data' => $data
+        );
 
-		$new_value = $data['data'] - $offset;
-		return $this->save($id, $new_value, $data['ttl'])
-			? $new_value
-			: FALSE;
-	}
+        if (write_file($this->_cache_path . $id, serialize($contents))) {
+            chmod($this->_cache_path . $id, 0640);
+            return TRUE;
+        }
 
-	// ------------------------------------------------------------------------
+        return FALSE;
+    }
 
-	/**
-	 * Clean the Cache
-	 *
-	 * @return	bool	false on failure/true on success
-	 */
-	public function clean()
-	{
-		return delete_files($this->_cache_path, FALSE, TRUE);
-	}
+    // ------------------------------------------------------------------------
 
-	// ------------------------------------------------------------------------
+    /**
+     * Decrement a raw value
+     *
+     * @param string $id Cache ID
+     * @param int $offset Step/value to reduce by
+     * @return    New value on success, FALSE on failure
+     */
+    public function decrement($id, $offset = 1)
+    {
+        $data = $this->_get($id);
 
-	/**
-	 * Cache Info
-	 *
-	 * Not supported by file-based caching
-	 *
-	 * @param	string	user/filehits
-	 * @return	mixed	FALSE
-	 */
-	public function cache_info($type = NULL)
-	{
-		return get_dir_file_info($this->_cache_path);
-	}
+        if ($data === FALSE) {
+            $data = array('data' => 0, 'ttl' => 60);
+        } elseif (!is_int($data['data'])) {
+            return FALSE;
+        }
 
-	// ------------------------------------------------------------------------
+        $new_value = $data['data'] - $offset;
+        return $this->save($id, $new_value, $data['ttl'])
+            ? $new_value
+            : FALSE;
+    }
 
-	/**
-	 * Get Cache Metadata
-	 *
-	 * @param	mixed	key to get cache metadata on
-	 * @return	mixed	FALSE on failure, array on success.
-	 */
-	public function get_metadata($id)
-	{
-		if ( ! is_file($this->_cache_path.$id))
-		{
-			return FALSE;
-		}
+    // ------------------------------------------------------------------------
 
-		$data = unserialize(file_get_contents($this->_cache_path.$id));
+    /**
+     * Clean the Cache
+     *
+     * @return    bool    false on failure/true on success
+     */
+    public function clean()
+    {
+        return delete_files($this->_cache_path, FALSE, TRUE);
+    }
 
-		if (is_array($data))
-		{
-			$mtime = filemtime($this->_cache_path.$id);
+    // ------------------------------------------------------------------------
 
-			if ( ! isset($data['ttl'], $data['time']))
-			{
-				return FALSE;
-			}
+    /**
+     * Cache Info
+     *
+     * Not supported by file-based caching
+     *
+     * @param string    user/filehits
+     * @return    mixed    FALSE
+     */
+    public function cache_info($type = NULL)
+    {
+        return get_dir_file_info($this->_cache_path);
+    }
 
-			return array(
-				'expire' => $data['time'] + $data['ttl'],
-				'mtime'	 => $mtime
-			);
-		}
+    // ------------------------------------------------------------------------
 
-		return FALSE;
-	}
+    /**
+     * Get Cache Metadata
+     *
+     * @param mixed    key to get cache metadata on
+     * @return    mixed    FALSE on failure, array on success.
+     */
+    public function get_metadata($id)
+    {
+        if (!is_file($this->_cache_path . $id)) {
+            return FALSE;
+        }
 
-	// ------------------------------------------------------------------------
+        $data = unserialize(file_get_contents($this->_cache_path . $id));
 
-	/**
-	 * Is supported
-	 *
-	 * In the file driver, check to see that the cache directory is indeed writable
-	 *
-	 * @return	bool
-	 */
-	public function is_supported()
-	{
-		return is_really_writable($this->_cache_path);
-	}
+        if (is_array($data)) {
+            $mtime = filemtime($this->_cache_path . $id);
 
-	// ------------------------------------------------------------------------
+            if (!isset($data['ttl'], $data['time'])) {
+                return FALSE;
+            }
 
-	/**
-	 * Get all data
-	 *
-	 * Internal method to get all the relevant data about a cache item
-	 *
-	 * @param	string	$id	Cache ID
-	 * @return	mixed	Data array on success or FALSE on failure
-	 */
-	protected function _get($id)
-	{
-		if ( ! is_file($this->_cache_path.$id))
-		{
-			return FALSE;
-		}
+            return array(
+                'expire' => $data['time'] + $data['ttl'],
+                'mtime' => $mtime
+            );
+        }
 
-		$data = unserialize(file_get_contents($this->_cache_path.$id));
+        return FALSE;
+    }
 
-		if ($data['ttl'] > 0 && time() > $data['time'] + $data['ttl'])
-		{
-			file_exists($this->_cache_path.$id) && unlink($this->_cache_path.$id);
-			return FALSE;
-		}
+    // ------------------------------------------------------------------------
 
-		return $data;
-	}
+    /**
+     * Is supported
+     *
+     * In the file driver, check to see that the cache directory is indeed writable
+     *
+     * @return    bool
+     */
+    public function is_supported()
+    {
+        return is_really_writable($this->_cache_path);
+    }
 
 }

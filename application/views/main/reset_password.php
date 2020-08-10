@@ -1,4 +1,4 @@
-<div class="col-lg-4 col-lg-offset-4">
+<div class="center-word">
     <h2>Reset your password</h2>
     <h5>Hello <span><?php echo $firstName; ?></span>, <br>Please enter your password 2x below to reset.</h5>
     <?php

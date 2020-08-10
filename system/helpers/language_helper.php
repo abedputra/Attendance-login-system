@@ -26,50 +26,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
- * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
- * @license	https://opensource.org/licenses/MIT	MIT License
- * @link	https://codeigniter.com
- * @since	Version 1.0.0
+ * @package    CodeIgniter
+ * @author    EllisLab Dev Team
+ * @copyright    Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright    Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @license    https://opensource.org/licenses/MIT	MIT License
+ * @link    https://codeigniter.com
+ * @since    Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * CodeIgniter Language Helpers
  *
- * @package		CodeIgniter
- * @subpackage	Helpers
- * @category	Helpers
- * @author		EllisLab Dev Team
- * @link		https://codeigniter.com/user_guide/helpers/language_helper.html
+ * @package        CodeIgniter
+ * @subpackage    Helpers
+ * @category    Helpers
+ * @author        EllisLab Dev Team
+ * @link        https://codeigniter.com/user_guide/helpers/language_helper.html
  */
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('lang'))
-{
-	/**
-	 * Lang
-	 *
-	 * Fetches a language variable and optionally outputs a form label
-	 *
-	 * @param	string	$line		The language line
-	 * @param	string	$for		The "for" value (id of the form element)
-	 * @param	array	$attributes	Any additional HTML attributes
-	 * @return	string
-	 */
-	function lang($line, $for = '', $attributes = array())
-	{
-		$line = get_instance()->lang->line($line);
+if (!function_exists('lang')) {
+    /**
+     * Lang
+     *
+     * Fetches a language variable and optionally outputs a form label
+     *
+     * @param string $line The language line
+     * @param string $for The "for" value (id of the form element)
+     * @param array $attributes Any additional HTML attributes
+     * @return    string
+     */
+    function lang($line, $for = '', $attributes = array())
+    {
+        $line = get_instance()->lang->line($line);
 
-		if ($for !== '')
-		{
-			$line = '<label for="'.$for.'"'._stringify_attributes($attributes).'>'.$line.'</label>';
-		}
+        if ($for !== '') {
+            $line = '<label for="' . $for . '"' . _stringify_attributes($attributes) . '>' . $line . '</label>';
+        }
 
-		return $line;
-	}
+        return $line;
+    }
 }
