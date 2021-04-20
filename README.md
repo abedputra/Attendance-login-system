@@ -1,3 +1,9 @@
+
+# ===================
+# 🛑  We no longer support this system, please see the latest version with <a href="https://codecanyon.net/item/attendance-with-fingerprint-android-system-managemnet/25407573">Laravel here</a> 🛑 
+# ===================
+
+
 <img src="https://user-images.githubusercontent.com/11581453/64755519-c24cd200-d55d-11e9-9011-fd3b11dfa56f.png" width="150">
 
 # Attendance login system
