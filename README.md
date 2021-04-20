@@ -1,6 +1,6 @@
 
 # ===================
-# 🛑  We no longer support this system, please see the latest version with <a href="https://codecanyon.net/item/attendance-with-fingerprint-android-system-managemnet/25407573">Laravel here</a> 🛑 
+# 🛑  We no longer support this system, please see the latest version with <a href="https://codecanyon.net/item/attendance-with-qr-code-android-system-management/24718396">Laravel here</a> 🛑 
 # ===================
 
 
