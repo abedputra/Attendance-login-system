@@ -138,4 +138,4 @@ The MIT License (MIT).
 Copyright (c) 2017, Abed Putra.
 
 Please feel free to send me an email if you have any problems.
-Thank you so much, my email : abedputra@gmail.com.
+Thank you so much, my email : contact@abedputra.my.id.
