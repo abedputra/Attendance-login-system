@@ -4,8 +4,8 @@
 # ===================
 
 # Review New Version on Youtube here
-https://youtu.be/UsJTcffj-gE
-https://youtu.be/e6HzHrqdLNc
+- https://youtu.be/UsJTcffj-gE
+- https://youtu.be/e6HzHrqdLNc
 
 <img src="https://user-images.githubusercontent.com/11581453/64755519-c24cd200-d55d-11e9-9011-fd3b11dfa56f.png" width="150">
 
