@@ -3,7 +3,7 @@
 # 🛑  We no longer support this system, please see the latest version with <a href="https://codecanyon.net/item/attendance-with-qr-flutter-laravel/32116004">Laravel here</a> 🛑 
 # ===================
 
-![banner_muliatech](https://github.com/abedputra/Attendance-login-system/assets/11581453/fdce5763-5ff4-432c-8592-69d170364ac5)
+[<img src="banner_muliatech.png" alt="Attendance Fingerprint">](https://muliatech.web.id)
 
 # Review New Version on Youtube here
 - https://youtu.be/UsJTcffj-gE
